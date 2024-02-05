@@ -1,11 +1,11 @@
 import "react-router-dom";
 import { Route, Routes } from "react-router-dom";
-import LoginPanel from "./Login";
+import HomePanel from "./Home";
 
 function App() {
   return (
     <Routes>
-      <Route path="/system-login" element={<LoginPanel></LoginPanel>}></Route>
+      <Route path="/patient-home" element={<HomePanel></HomePanel>}></Route>
     </Routes>
   );
 }
