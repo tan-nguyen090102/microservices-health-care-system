@@ -1,5 +1,5 @@
-import React from "react";
-import { Link } from "react-router-dom";
+import React, { useEffect } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import {
   Flex,
   Stack,
@@ -11,6 +11,56 @@ import {
 } from "@chakra-ui/react";
 
 export default function LoginPanel() {
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    fetch("http://localhost:5000/cas-login")
+      .then((response) => response.json)
+      .then((data) => {
+        //User has not log in
+        if (data[0] === "None") navigate(window.location.origin + "/cas-login");
+        else navigate(data[1]);
+      });
+  }, []);
+
+  const initialValues = {
+    userID: "",
+    password: "",
+  };
+
+  //Input listeners
+  const [inputValue, setInputValue] = React.useState(initialValues);
+  const handleInput = (e) => {
+    const { name, value } = e.target;
+    setInputValue({
+      ...inputValue,
+      [name]: value,
+    });
+  };
+
+  //Handle login
+  const handleLogin = () => {
+    fetch("http://localhost:5000/cas-login", {
+      method: "POST",
+      headers: {
+        Accept: "application/json",
+        "content-type": "application/json; charset=UTF-8",
+      },
+      mode: "cors",
+      body: JSON.stringify({
+        userID: inputValue.userID,
+        password: inputValue.password,
+      }),
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        console.log(data);
+        if (data[0] === "Authorized") {
+          window.location = data[1];
+        }
+      });
+  };
+
   //DOM
   return (
     <div>
@@ -38,7 +88,9 @@ export default function LoginPanel() {
                 name="userID"
                 data-testid="userID"
                 placeholder="Email"
+                value={inputValue.userID}
                 variant="outline"
+                onChange={handleInput}
                 mb={3}
                 background="white"
               ></Input>
@@ -46,7 +98,9 @@ export default function LoginPanel() {
                 name="password"
                 data-testid="password"
                 placeholder="Password"
+                value={inputValue.password}
                 variant="outline"
+                onChange={handleInput}
                 mb={3}
                 background="white"
               ></Input>
@@ -66,7 +120,9 @@ export default function LoginPanel() {
                 <Button
                   data-testid="loginButton"
                   colorScheme="blue"
-                  onClick={() => {}}
+                  onClick={() => {
+                    handleLogin();
+                  }}
                 >
                   Login
                 </Button>

@@ -5,7 +5,7 @@ import LoginPanel from "./Login";
 function App() {
   return (
     <Routes>
-      <Route path="/system-login" element={<LoginPanel></LoginPanel>}></Route>
+      <Route path="/cas-login" element={<LoginPanel></LoginPanel>}></Route>
     </Routes>
   );
 }
