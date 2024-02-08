@@ -13,13 +13,26 @@ import {
 export default function LoginPanel() {
   const navigate = useNavigate();
 
+  const [nexturl, setNextURL] = React.useState("");
   useEffect(() => {
-    fetch("http://localhost:5000/cas-login")
-      .then((response) => response.json)
+    fetch("http://localhost:5000/cas-login", {
+      method: "POST",
+      headers: {
+        Accept: "application/json",
+        "content-type": "application/json; charset=UTF-8",
+      },
+      mode: "cors",
+      credentials: "include",
+      body: JSON.stringify({}),
+    })
+      .then((response) => response.json())
       .then((data) => {
         //User has not log in
-        if (data[0] === "None") navigate(window.location.origin + "/cas-login");
-        else navigate(data[1]);
+        if (data[0] !== "False") {
+          window.location = data[1];
+        } else {
+          setNextURL(data[1]);
+        }
       });
   }, []);
 
@@ -47,14 +60,15 @@ export default function LoginPanel() {
         "content-type": "application/json; charset=UTF-8",
       },
       mode: "cors",
+      credentials: "include",
       body: JSON.stringify({
         userID: inputValue.userID,
         password: inputValue.password,
+        nexturl: nexturl,
       }),
     })
       .then((response) => response.json())
       .then((data) => {
-        console.log(data);
         if (data[0] === "Authorized") {
           window.location = data[1];
         }

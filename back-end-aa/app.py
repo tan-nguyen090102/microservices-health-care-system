@@ -1,46 +1,54 @@
 import json
+import os
 from flask import Flask, jsonify, request, session
+from flask_session import Session
 from cas import CASClient
 from flask_cors import CORS, cross_origin
 
 app = Flask(__name__)
+SECRET_KEY = os.urandom(32)
+SESSION_TYPE = 'filesystem'
+app.config.from_object(__name__)
+Session(app)
 CORS(app)
-app.secret_key = 'V7nlCN90LPHOTA9PGGyf'
 
 userName = "daniel"
 password = "12345"
-url = ""
 
 @app.route("/cas-login", methods = ["GET", "POST"])
-@cross_origin()
-def login():
-    global url
-    if request.method == "GET":
-        response_list = []
-        print(session.get("user"))
-        if session.get("user") is not None:
-            print("Has user")
-            response_list.append(session["user"])
-        else:
-            print("No user")
-            response_list.append("False")
-        response_list.append(url)
-
-        print(response_list)
-        return json.dumps(response_list)
+@cross_origin(supports_credentials=True)
+def login():      
     if request.method == "POST":
         json_object = request.json
         if "url" in json_object:
-            url = json_object["url"]
+            user = json_object["user"]
+            session["url"] = json_object["url"]
+            if "user" in session:
+                return json.dumps(["Authorize", user])
+            else:
+                return json.dumps(["False", user])
         elif "userID" in json_object:
             userID = json_object["userID"]
-            pw = json_object["password"] 
+            pw = json_object["password"]
+            url = json_object["nexturl"] 
 
             if (userID == userName and pw == password):
                 session["user"] = userID
-                print(session.get("user"))
+                session["url"] = url
                 return jsonify(["Authorized", url])
+        else:
+            return json.dumps(["False", session.get("url")])
     return jsonify("Done")
+
+
+@app.route("/cas-logout", methods = ["GET", "POST"])
+@cross_origin(supports_credentials=True)
+def logout():
+    if request.method == "POST":
+        json_object = request.json
+        session.clear()
+        return jsonify("Done")
+
 
 if __name__ == "__main__":
     app.run()
