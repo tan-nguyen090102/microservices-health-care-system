@@ -24,7 +24,7 @@ export default function HomePanel() {
         if (data[0] === "False") {
           window.location = "http://localhost:3000/cas-login";
         } else {
-          console.log("Welcome " + data[1]);
+          console.log("Welcome " + data[1] + data[2]);
         }
       });
   }, []);
