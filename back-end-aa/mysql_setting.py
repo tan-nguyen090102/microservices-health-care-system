@@ -5,7 +5,7 @@ class Setting():
     def __init__(self) -> None:
         self.mysql_setting = {
             "user": "root",
-            "password": "your_password",
+            "password": "Clete2345",
             "server": "localhost",
             "port": 3306,
             "db": "dev_db",
@@ -29,4 +29,4 @@ class Setting():
     
     def database(self):
         if self.database_setup is None:
-            return self.connection(self)
+            return self.connection()

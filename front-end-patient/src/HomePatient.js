@@ -29,7 +29,7 @@ export default function HomePanel() {
       });
   }, []);
 
-  //Handle login
+  //Handle logout
   const handleLogout = () => {
     fetch("http://localhost:5000/cas-logout", {
       method: "POST",

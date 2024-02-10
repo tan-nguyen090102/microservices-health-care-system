@@ -1,15 +1,13 @@
 import json
 from flask import Blueprint, jsonify, request, session
 from flask_cors import cross_origin
-
-userName = "daniel"
-password = "12345"
+from database_connection import database, execute_stored_procedure
 
 auth_bp = Blueprint("auth_bp", __name__)
 
 @auth_bp.route("/cas-login", methods = ["GET", "POST"])
 @cross_origin(supports_credentials=True)
-def login():      
+def login(database = database):      
     if request.method == "POST":
         json_object = request.json
         if "url" in json_object:
@@ -20,16 +18,27 @@ def login():
             else:
                 return json.dumps(["False", user])
         elif "userID" in json_object:
-            userID = json_object["userID"]
+            username = json_object["userID"]
             pw = json_object["password"]
-            url = json_object["nexturl"] 
+            url = json_object["nexturl"]
 
-            if (userID == userName and pw == password):
-                session["user"] = userID
-                session["url"] = url
-                return jsonify(["Authorized", url])
+            #Get the user from the database
+            get_user = execute_stored_procedure(database, "select_user", (username,))
+
+            if get_user is not None:
+                user = get_user[0]
+                if (user[4] == pw):
+
+                    session["user"] = user[0]
+                    session["url"] = url
+                    return jsonify(["Authorized", url, user[5]])
+                else:
+                    return json.dumps(["Invalid", session.get("url")])
+            else:
+                    return json.dumps(["Invalid", session.get("url")])
         else:
             return json.dumps(["False", session.get("url")])
+            
     return jsonify("Done")
 
 
@@ -37,7 +46,6 @@ def login():
 @cross_origin(supports_credentials=True)
 def logout():
     if request.method == "POST":
-        json_object = request.json
         session.pop("user", None)
         session.pop("url", None)
         session.clear()
