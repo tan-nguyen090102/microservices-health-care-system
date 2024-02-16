@@ -28,9 +28,8 @@ export default function LoginPanel() {
       credentials: "include",
       body: JSON.stringify({}),
     })
-      .then((response) => response.json())
+      ?.then((response) => response.json())
       .then((data) => {
-        console.log(data);
         //User has logged in
         if (data[0] !== "False") {
           setUnauthorizedAccess(false);
@@ -44,7 +43,8 @@ export default function LoginPanel() {
             setUnauthorizedAccess(true);
           }
         }
-      });
+      })
+      .catch((err) => console.log(err));
   }, [location]);
 
   const initialValues = {
@@ -81,7 +81,7 @@ export default function LoginPanel() {
         nexturl: nexturl,
       }),
     })
-      .then((response) => response.json())
+      ?.then((response) => response.json())
       .then((data) => {
         if (data[0] === "Authorized") {
           window.location = data[1];
@@ -195,7 +195,7 @@ export default function LoginPanel() {
         <Flex height="50vh" justifyContent="center" background="blue.500">
           <Wrap justify="center" mt={10}>
             <Text fontSize="x-large" mt={6}>
-              Log in to other modules
+              Log in to other modulesa
             </Text>
           </Wrap>
         </Flex>

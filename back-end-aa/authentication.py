@@ -14,7 +14,7 @@ def login(database = database):
             user = json_object["user"]
             session["url"] = json_object["url"]
             if "user" in session:
-                return json.dumps(["Authorize", user, id(session)])
+                return json.dumps(["Authorize", user, id(session), session.get("authorizedID")])
             else:
                 return json.dumps(["False", user])
         elif "userID" in json_object:
@@ -31,6 +31,7 @@ def login(database = database):
 
                     session["user"] = user[0]
                     session["url"] = url
+                    session["authorizedID"] = user[5]
                     return jsonify(["Authorized", url, user[5]])
                 else:
                     return json.dumps(["Invalid", session.get("url")])
@@ -48,6 +49,7 @@ def logout():
     if request.method == "POST":
         session.pop("user", None)
         session.pop("url", None)
+        session.pop("authorizedID", None)
         session.clear()
         return jsonify("Done")
 
