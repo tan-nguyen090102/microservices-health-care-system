@@ -12,7 +12,13 @@ def login(database = database):
         json_object = request.json
         if "url" in json_object:
             user = json_object["user"]
+
+            #Pop the old url to get the new one if presents
+            if (session.get("url")):
+                session.pop("url", None)
+
             session["url"] = json_object["url"]
+            print(session.get("url"))
             if "user" in session:
                 return json.dumps(["Authorize", user, id(session), session.get("authorizedID")])
             else:
@@ -20,7 +26,6 @@ def login(database = database):
         elif "userID" in json_object:
             username = json_object["userID"]
             pw = json_object["password"]
-            url = json_object["nexturl"]
 
             #Get the user from the database
             get_user = execute_stored_procedure(database, "select_user", (username,))
@@ -30,13 +35,12 @@ def login(database = database):
                 if (user[4] == pw):
 
                     session["user"] = user[0]
-                    session["url"] = url
                     session["authorizedID"] = user[5]
-                    return jsonify(["Authorized", url, user[5]])
+                    return json.dumps(["Authorized", session.get("url"), user[5]])
                 else:
                     return json.dumps(["Invalid", session.get("url")])
             else:
-                    return json.dumps(["Invalid", session.get("url")])
+                return json.dumps(["Invalid", session.get("url")])
         else:
             return json.dumps(["False", session.get("url")])
             

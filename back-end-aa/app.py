@@ -21,6 +21,6 @@ if __name__ == "__main__":
     try:
         os.system('rm -rf flask_session/*')
         app.register_blueprint(auth_bp)
-        app.run()
+        app.run(host="0.0.0.0")
     finally:
         database.close()

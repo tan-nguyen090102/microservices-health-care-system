@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { Link, useLocation } from "react-router-dom";
+import { Link } from "react-router-dom";
 import {
   Flex,
   Stack,
@@ -11,14 +11,14 @@ import {
 } from "@chakra-ui/react";
 
 export default function LoginPanel() {
-  const location = useLocation();
+  const serverIP = window.location.hostname;
 
-  const [nexturl, setNextURL] = React.useState("");
+  //const [nexturl, setNextURL] = React.useState("");
   const [isUnauthorizedAccess, setUnauthorizedAccess] = React.useState(false);
   useEffect(() => {
     document.title = "Healthcare System Authentication";
 
-    fetch("http://localhost:5000/cas-login", {
+    fetch("http://" + serverIP + ":5000/cas-login", {
       method: "POST",
       headers: {
         Accept: "application/json",
@@ -30,13 +30,14 @@ export default function LoginPanel() {
     })
       ?.then((response) => response.json())
       .then((data) => {
+        console.log(data);
         //User has logged in
         if (data[0] !== "False") {
           setUnauthorizedAccess(false);
           window.location = data[1];
         } else {
           setUnauthorizedAccess(false);
-          setNextURL(data[1]);
+          //setNextURL(data[1]);
 
           //Check if the url is null
           if (data[1] === null) {
@@ -45,7 +46,7 @@ export default function LoginPanel() {
         }
       })
       .catch((err) => console.log(err));
-  }, [location]);
+  }, [serverIP]);
 
   const initialValues = {
     userID: "",
@@ -67,7 +68,7 @@ export default function LoginPanel() {
   //Handle login
   const [isPopUpInvalid, setPopUpInvalid] = React.useState(false);
   const handleLogin = () => {
-    fetch("http://localhost:5000/cas-login", {
+    fetch("http://" + serverIP + ":5000/cas-login", {
       method: "POST",
       headers: {
         Accept: "application/json",
@@ -78,13 +79,12 @@ export default function LoginPanel() {
       body: JSON.stringify({
         userID: inputValue.userID,
         password: inputValue.password,
-        nexturl: nexturl,
       }),
     })
       ?.then((response) => response.json())
       .then((data) => {
         if (data[0] === "Authorized") {
-          window.location = data[1];
+          window.location = "http://" + data[1];
         } else if (data[0] === "Invalid") {
           setPopUpInvalid(true);
         }
