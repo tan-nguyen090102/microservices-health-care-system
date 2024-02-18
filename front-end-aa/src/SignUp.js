@@ -1,8 +1,4 @@
-<<<<<<< HEAD
-import React from "react";
-=======
 import React, { useEffect } from "react";
->>>>>>> front end for signup
 import { Link } from "react-router-dom";
 import {
   Flex,
@@ -14,21 +10,6 @@ import {
   Input,
 } from "@chakra-ui/react";
 
-<<<<<<< HEAD
-function SignUpPanel() {
-  const serverIP = window.location.hostname;
-  const [errorMessage, setErrorMessage] = React.useState('');
-  const [isSuccess, setIsSuccess] = React.useState(false);
-
-  const initialValue = {
-    firstName: "",
-    lastName: "",
-    email: "",
-    password: "",
-  }
-
-  const [inputValue, setInputValue] = React.useState(initialValue);
-=======
 export default function SignUpPanel() {
   const serverIP = window.location.hostname;
   const [isUnauthorizedAccess, setUnauthorizedAccess] = React.useState(false);
@@ -74,50 +55,11 @@ export default function SignUpPanel() {
 
   //Input listeners
   const [inputValue, setInputValue] = React.useState(initialValues);
->>>>>>> front end for signup
   const handleInput = (e) => {
     const { name, value } = e.target;
     setInputValue({
       ...inputValue,
       [name]: value,
-<<<<<<< HEAD
-    })
-  }
-
-  const passwordRegex = [];
-  const isValidPassword = (password) => {
-    return passwordRegex.test(password);
-  };
-
-  const emailRegex = [];
-  const isValidEmail = (email) => {
-    return emailRegex.test(email);
-  }
-
-
-  const handleSignUp = () => {
-    if (!inputValue.firstName || !inputValue.lastName || !inputValue.email || !inputValue.password) {
-      setErrorMessage("Please fill in all required fields.");
-      return;
-    }
-
-    if (!isValidPassword(inputValue.password)) {
-      setErrorMessage(
-        "Password must meet the following criteria:" +
-        "Be at least 8 characters long," +
-        "Have at least one number and one special character," +
-        "Have at least one lowercase and one uppercase character."
-      );
-      return;
-    }
-
-    if (!isValidEmail(inputValue.email)){
-      setErrorMessage("Please enter email in the correct format.");
-      return;
-    }
-
-    fetch("http://" + serverIP + ":5000/cas-signup", {
-=======
     });
 
     setPopUpInvalid(false);
@@ -127,46 +69,22 @@ export default function SignUpPanel() {
   const [isPopUpInvalid, setPopUpInvalid] = React.useState(false);
   const handleSignUp = () => {
     fetch("http://" + serverIP + ":3000/cas-signup", {
->>>>>>> front end for signup
       method: "POST",
       headers: {
         Accept: "application/json",
         "content-type": "application/json; charset=UTF-8",
       },
       mode: "cors",
-<<<<<<< HEAD
-      body: JSON.stringify({
-        firstName: inputValue.firstName,
-        lastName: inputValue.lastName,
-=======
       credentials: "include",
       body: JSON.stringify({
         firstname: inputValue.firstname,
         lastname: inputValue.lastname,
->>>>>>> front end for signup
         email: inputValue.email,
         password: inputValue.password,
       }),
     })
       ?.then((response) => response.json())
       .then((data) => {
-<<<<<<< HEAD
-        if (data.status === "Success") {
-          setIsSuccess(true);
-          setErrorMessage("");
-        }
-        else if (data.status === "Error") {
-          console.log(data.Message);
-          setErrorMessage(data.Message);
-        }
-      })
-      .catch((error) => { 
-        console.log(error);
-        setErrorMessage(error.message);
-      });
-  };
-  
-=======
         if (data[0] === "Authorized") {
           window.location = "http://" + data[1];
         } else if (data[0] === "Invalid") {
@@ -175,33 +93,10 @@ export default function SignUpPanel() {
       });
   };
 
->>>>>>> front end for signup
   //DOM
   return (
     <div>
       <Flex
-<<<<<<< HEAD
-        height="100vh"
-        alignItems="baseline"
-        justifyContent="left"
-        background= "blue.500"
-      >
-        {isSuccess && (
-          <Wrap justify="center" mt={10}>
-            <Text fontSize="x-large" mt={3} color="white" data-testid="successMessage-text">
-              <b>Success! Your account has been created.</b>
-            </Text>
-          </Wrap>
-        )}
-        {errorMessage && (
-          <Wrap justify="center" mt={10}>
-            <Text fontSize="x-large" mt={3} color="white" data-testid="errorMessage-text">
-              <b>{errorMessage}</b>
-            </Text>
-          </Wrap>
-        )}
-        {!isSuccess && (
-=======
         height="50vh"
         alignItems="baseline"
         justifyContent="left"
@@ -215,7 +110,6 @@ export default function SignUpPanel() {
           </Wrap>
         )}
         {!isUnauthorizedAccess && (
->>>>>>> front end for signup
           <Stack direction="row" mt={50}>
             <Flex
               width="100vh"
@@ -231,34 +125,6 @@ export default function SignUpPanel() {
               <Stack direction="column" justify="center"></Stack>
               <Wrap spacing="20px" mt={3}>
                 <Input
-<<<<<<< HEAD
-                  name="firstName"
-                  data-testid="firstName"
-                  placeholder="First Name"
-                  value={inputValue.firstName}
-                  variant="outline"
-                  onChange={handleInput}
-                  required
-                  mb={3}
-                  background="white"
-                ></Input>
-
-                <Input
-                  name="lastName"
-                  data-testid="lastName"
-                  placeholder="Last Name"
-                  value={inputValue.lastName}
-                  variant="outline"
-                  onChange={handleInput}
-                  required
-                  mb={3}
-                  background="white"
-                ></Input>
-
-                <Input
-                  name="email"
-                  data-testid="email"
-=======
                   name="First Name"
                   data-testid="First Name"
                   placeholder="First Name"
@@ -281,61 +147,26 @@ export default function SignUpPanel() {
                 <Input
                   name="Email"
                   data-testid="Email"
->>>>>>> front end for signup
                   placeholder="Email"
                   value={inputValue.email}
                   variant="outline"
                   onChange={handleInput}
-<<<<<<< HEAD
-                  required
-                  mb={3}
-                  background="white"
-                ></Input>
-
-                <Input
-                  name="password"
-                  data-testid="password"
-=======
                   mb={3}
                   background="white"
                 ></Input>
                 <Input
                   name="Password"
                   data-testid="Password"
->>>>>>> front end for signup
                   placeholder="Password"
                   value={inputValue.password}
                   variant="outline"
                   type="password"
                   onChange={handleInput}
-<<<<<<< HEAD
-                  required
-                  mb={3}
-                  background="white"
-                ></Input>
-
-
-                <Wrap spacing="20px" mt={6}>
-                  <Button
-                    data-testid="submitButton"
-                    colorScheme="blue"
-                    onClick={() => {
-                      handleSignUp();
-                    }}
-                  >
-                    Submit
-                  </Button>
-                </Wrap>
-              </Wrap>
-            </Flex>
-
-=======
                   mb={3}
                   background="white"
                 ></Input>
               </Wrap>
             </Flex>
->>>>>>> front end for signup
             <Flex
               width="auto"
               height="fit-content"
@@ -345,22 +176,6 @@ export default function SignUpPanel() {
               p={12}
               rounded={6}
             >
-<<<<<<< HEAD
-              <Stack direction="column" spacing={1}>
-
-                <Text fontSize = "s" >
-                  Already have an account? <Link to= '/cas-login' data-testid = "loginlink" style={{textDecoration:'underline'}}>
-                  Log in </Link>
-                </Text>
-
-                <Text fontSize = "s" >
-                  Forgot your password? <Link to= '/cas-forgot-pw' data-testid = "forgotlink" style={{textDecoration:'underline'}}>
-                  Reset Password </Link>
-                </Text>
-              
-                <Wrap justify="center">
-                  <Text fontSize="xs" mt={ 3 }>
-=======
               <Stack direction="column" spacing={3}>
                 <Wrap spacing="20px" mt={6}>
                   <Button
@@ -386,7 +201,6 @@ export default function SignUpPanel() {
                 )}
                 <Wrap justify="center">
                   <Text fontSize="xs" mt={isPopUpInvalid ? 3 : 6}>
->>>>>>> front end for signup
                     Healthcare System
                   </Text>
                 </Wrap>
@@ -394,14 +208,6 @@ export default function SignUpPanel() {
             </Flex>
           </Stack>
         )}
-<<<<<<< HEAD
-        </Flex>
-    </div>
-  );
-}
-export default SignUpPanel;
-  
-=======
       </Flex>
       {!isUnauthorizedAccess && (
         <Flex height="50vh" justifyContent="center" background="blue.500">
@@ -415,4 +221,3 @@ export default SignUpPanel;
   );
 }
   
->>>>>>> front end for signup
