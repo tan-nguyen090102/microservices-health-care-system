@@ -18,7 +18,7 @@ def login(database = database):
                 session.pop("url", None)
 
             session["url"] = json_object["url"]
-            print(session.get("url"))
+            #print(session.get("url"))
             if "user" in session:
                 return json.dumps(["Authorize", user, id(session), session.get("authorizedID")])
             else:

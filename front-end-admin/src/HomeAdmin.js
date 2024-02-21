@@ -73,15 +73,17 @@ export default function HomePanel() {
             </Text>
           </Wrap>
         )}
-        <Button
-          data-testid="logoutButton"
-          colorScheme="blue"
-          onClick={() => {
-            handleLogout();
-          }}
-        >
-          Logout
-        </Button>
+        {!isUnauthorizedAccess && (
+          <Button
+            data-testid="logoutButton"
+            colorScheme="blue"
+            onClick={() => {
+              handleLogout();
+            }}
+          >
+            Logout
+          </Button>
+        )}
       </Flex>
     </div>
   );

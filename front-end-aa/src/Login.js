@@ -157,6 +157,7 @@ export default function LoginPanel() {
               <Stack direction="column" spacing={3}>
                 <Wrap spacing="20px" mt={6}>
                   <Button
+                    name="loginButton"
                     data-testid="loginButton"
                     colorScheme="blue"
                     onClick={() => {
@@ -166,6 +167,7 @@ export default function LoginPanel() {
                     Login
                   </Button>
                   <Button
+                    name="signupButton"
                     data-testid="signupButton"
                     colorScheme="blue"
                     variant="outline"
