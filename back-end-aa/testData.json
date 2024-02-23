@@ -1,0 +1,9 @@
+{
+    "url": "http://localhost:5000/cas-login",
+    "target-url": "http://localhost:3001/admin-home",
+    "post-request": 
+        {
+            "userID": "daniel.stone@yahoo.com",
+            "password": "12345"
+        }
+}

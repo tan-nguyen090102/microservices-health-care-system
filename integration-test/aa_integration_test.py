@@ -4,7 +4,6 @@ import socket
 import time
 from selenium import webdriver
 from selenium.webdriver.edge.service import Service
-from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
@@ -36,12 +35,15 @@ class LoginIntegrationTest:
         try:
             # Assign services and options to driver
             self.driver = webdriver.Edge(service=service, options=edge_options)
+            self.driver.maximize_window()
             self.driver.get("http://" + self.IP + self.test_object["port"] + self.test_object["tail"])
 
+            # Get the component elements on screen
             emailInput = WebDriverWait(self.driver, 10).until(EC.presence_of_element_located((By.NAME, "userID")))
             passwordInput = WebDriverWait(self.driver, 10).until(EC.presence_of_element_located((By.NAME, "password")))
             loginButton = WebDriverWait(self.driver, 10).until(EC.presence_of_element_located((By.NAME, "loginButton")))
 
+            # Take actions
             emailInput.send_keys(self.test_object["email"])
             passwordInput.send_keys(self.test_object["password"])
             loginButton.click()
@@ -58,10 +60,19 @@ if __name__ == "__main__":
     time.sleep(1)
     driver.quit()
 
-    time.sleep(1)
-
     adminAutomation = LoginIntegrationTest("admin")
     driver = adminAutomation.automated_run()
     time.sleep(1)
     driver.quit()
+
+    unauthorizedAutomation = LoginIntegrationTest("unauthorized-entity")
+    driver = unauthorizedAutomation.automated_run()
+    time.sleep(1)
+    driver.quit()
+
+    invalidAutomation = LoginIntegrationTest("invalid-entity")
+    driver = invalidAutomation.automated_run()
+    time.sleep(1)
+    driver.quit()
+
 

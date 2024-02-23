@@ -11,5 +11,19 @@
         "tail": "/admin-home",
         "email": "well.mark@gmail.com",
         "password": "12345"
+    },
+
+    "unauthorized-entity": {
+        "port": ":3002",
+        "tail": "/admin-home",
+        "email": "daniel.stone@yahoo.com",
+        "password": "12345"
+    },
+
+    "invalid-entity": {
+        "port": ":3001",
+        "tail": "/patient-home",
+        "email": "well.mark@gmail.com",
+        "password": "67890"
     }
 }

@@ -2,7 +2,7 @@ import os
 from flask import Flask
 from flask_session import Session
 from flask_cors import CORS
-from authentication import auth_bp
+from router import auth_bp
 from database_connection import database
 
 

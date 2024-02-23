@@ -40,7 +40,7 @@ CREATE TABLE `users` (
 
 LOCK TABLES `users` WRITE;
 /*!40000 ALTER TABLE `users` DISABLE KEYS */;
-INSERT INTO `users` VALUES ('U1','Daniel','Stones','daniel.stone@yahoo.com','12345','P');
+INSERT INTO `users` VALUES ('U1','Daniel','Stones','daniel.stone@yahoo.com','12345','P'),('U2','Well','Mark','well.mark@gmail.com','12345','A');
 /*!40000 ALTER TABLE `users` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -59,13 +59,7 @@ UNLOCK TABLES;
 DELIMITER ;;
 CREATE DEFINER=`root`@`localhost` PROCEDURE `select_user`(in input_username VARCHAR(255))
 BEGIN
-	DECLARE user_select int;
-	
-	SELECT COUNT(*) INTO user_select FROM users WHERE email = input_username;
-    
-    if user_select = 1 then
-		SELECT * FROM users WHERE email = input_username;
-	end if;
+	SELECT * FROM users WHERE email = input_username;
 END ;;
 DELIMITER ;
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
@@ -82,4 +76,4 @@ DELIMITER ;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2024-02-10 16:07:57
+-- Dump completed on 2024-02-23 12:30:40

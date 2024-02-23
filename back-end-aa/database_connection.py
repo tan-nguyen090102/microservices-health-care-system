@@ -1,17 +1,15 @@
-import pymysql
-from pymysql.constants import CLIENT
 from mysql_setting import Setting
 
 database = Setting().database()
 
-def execute_stored_procedure(connection, procedure_name, parameters):
+def call_stored_procedure(connection, procedure_name, parameters):
     cursor = connection.cursor()
     connection.ping()
     try:
         database_response = None
         cursor.callproc(procedure_name, parameters)
-        func_matches = ["select", "check", "get"]
-        if any(x in procedure_name for x in func_matches):
+        function_matches = ["select", "check", "get"]
+        if any(x in procedure_name for x in function_matches):
             database_response = cursor.fetchall()
         print(f"'{procedure_name}' executed in MySQL.")
         if database_response:

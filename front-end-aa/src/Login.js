@@ -13,7 +13,6 @@ import {
 export default function LoginPanel() {
   const serverIP = window.location.hostname;
 
-  //const [nexturl, setNextURL] = React.useState("");
   const [isUnauthorizedAccess, setUnauthorizedAccess] = React.useState(false);
   useEffect(() => {
     document.title = "Healthcare System Authentication";
@@ -37,7 +36,6 @@ export default function LoginPanel() {
           window.location = data[1];
         } else {
           setUnauthorizedAccess(false);
-          //setNextURL(data[1]);
 
           //Check if the url is null
           if (data[1] === null) {
@@ -45,7 +43,7 @@ export default function LoginPanel() {
           }
         }
       })
-      .catch((err) => console.log(err));
+      .catch((error) => console.log(error));
   }, [serverIP]);
 
   const initialValues = {
@@ -103,7 +101,7 @@ export default function LoginPanel() {
         {isUnauthorizedAccess && (
           <Wrap justify="center" mt={10}>
             <Text fontSize="xxx-large" mt={3}>
-              <b>401 Forbidden: Unauhorized Access.</b>
+              <b>401 Forbidden: Unauthorized Access.</b>
             </Text>
           </Wrap>
         )}
@@ -197,7 +195,7 @@ export default function LoginPanel() {
         <Flex height="50vh" justifyContent="center" background="blue.500">
           <Wrap justify="center" mt={10}>
             <Text fontSize="x-large" mt={6}>
-              Log in to other modulesa
+              Log in to other modules
             </Text>
           </Wrap>
         </Flex>
