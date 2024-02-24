@@ -1,0 +1,10 @@
+# ignores .idea files from Netbrains IDEs
+.idea
+
+#ignoring pycache files
+*.pyc
+__pycache__/
+.pytest_cache/
+
+#ignoring flask_session folder
+flask_session/
