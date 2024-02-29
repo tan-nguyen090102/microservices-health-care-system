@@ -10,12 +10,16 @@ function App() {
   return (
     <Routes>
 <<<<<<< HEAD
+<<<<<<< HEAD
       <Route path={LOGIN_PATH} element={<LoginPanel></LoginPanel>}></Route>
       {/* <Route path="/" element={<LoginPanel></LoginPanel>}></Route> */}
       <Route path= {FORGOT_PASSWORD_PATH} element={<Forgot></Forgot>}> </Route> 
       <Route path= {CHANGE_PASSWORD_PATH} element={<ChangePw></ChangePw>}> </Route> 
 =======
       <Route path = '/' element={<SignUpPanel></SignUpPanel>}></Route>
+=======
+      <Route path = '/cas-signup' element={<SignUpPanel></SignUpPanel>}></Route>
+>>>>>>> edits
       <Route path="/cas-login" element={<LoginPanel></LoginPanel>}></Route>
 >>>>>>> front end for signup
     </Routes>
