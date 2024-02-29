@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Link } from "react-router-dom";
 import {
   Flex,
@@ -10,29 +10,65 @@ import {
   Input,
 } from "@chakra-ui/react";
 
-function SignUpPanel() {
+export default function SignUpPanel() {
   const serverIP = window.location.hostname;
-  const [errorMessage, setErrorMessage] = React.useState('');
-  const [isSuccess, setIsSuccess] = React.useState(false);
+  const [isUnauthorizedAccess, setUnauthorizedAccess] = React.useState(false);
+  useEffect(() => {
+    document.title = "Healthcare System Authentication";
+
+    fetch("http://" + serverIP + ":3000/cas-signup", {
+      method: "POST",
+      headers: {
+        Accept: "application/json",
+        "content-type": "application/json; charset=UTF-8",
+      },
+      mode: "cors",
+      credentials: "include",
+      body: JSON.stringify({}),
+    })
+      ?.then((response) => response.json())
+      .then((data) => {
+        console.log(data);
+        //User signed up, if credentials are valid they will be logged in to the system
+        if (data[0] !== "False") {
+          setUnauthorizedAccess(false);
+          window.location = data[1];
+        } else {
+          setUnauthorizedAccess(false);
+          //setNextURL(data[1]);
+
+          //Check if the url is null
+          if (data[1] === null) {
+            setUnauthorizedAccess(true);
+          }
+        }
+      })
+      .catch((err) => console.log(err));
+  }, [serverIP]);
 
   const initialValues = {
-    firstName: '',
-    lastName: '',
-    email: '',
-    password: '',
-  }
+    firstname: "",
+    lastname: "",
+    email: "",
+    password: "",
+  };
 
+  //Input listeners
   const [inputValue, setInputValue] = React.useState(initialValues);
   const handleInput = (e) => {
     const { name, value } = e.target;
     setInputValue({
       ...inputValue,
       [name]: value,
-    })
-  }
+    });
 
+    setPopUpInvalid(false);
+  };
+
+  //Handle login
+  const [isPopUpInvalid, setPopUpInvalid] = React.useState(false);
   const handleSignUp = () => {
-    fetch("http://" + serverIP + ":5000/cas-signup", {
+    fetch("http://" + serverIP + ":3000/cas-signup", {
       method: "POST",
       headers: {
         Accept: "application/json",
@@ -41,48 +77,39 @@ function SignUpPanel() {
       mode: "cors",
       credentials: "include",
       body: JSON.stringify({
-        firstName: inputValue.firstName,
-        lastName: inputValue.lastName,
+        firstname: inputValue.firstname,
+        lastname: inputValue.lastname,
         email: inputValue.email,
         password: inputValue.password,
       }),
     })
       ?.then((response) => response.json())
       .then((data) => {
-        console.log(data);
-        //User has signed up
-       
-          setIsSuccess(true);
-      })
-      .catch((error) => { 
-        setErrorMessage(error.message);
-      }, [serverIP]);
+        if (data[0] === "Authorized") {
+          window.location = "http://" + data[1];
+        } else if (data[0] === "Invalid") {
+          setPopUpInvalid(true);
+        }
+      });
   };
-  
+
   //DOM
   return (
     <div>
       <Flex
-        height="100vh"
+        height="50vh"
         alignItems="baseline"
         justifyContent="left"
-        background= "blue.500"
+        background={isUnauthorizedAccess ? "white" : "blue.500"}
       >
-        {isSuccess && (
+        {isUnauthorizedAccess && (
           <Wrap justify="center" mt={10}>
-            <Text fontSize="x-large" mt={3} color="green" data-testid="successMessage-text">
-              <b>Success! Your account has been created.</b>
+            <Text fontSize="xxx-large" mt={3}>
+              <b>401 Forbidden: Unauhorized Access.</b>
             </Text>
           </Wrap>
         )}
-        {errorMessage && (
-          <Wrap justify="center" mt={10}>
-            <Text fontSize="x-large" mt={3} color="red" data-testid="errorMessage-text">
-              <b>Failure: {errorMessage}</b>
-            </Text>
-          </Wrap>
-        )}
-        {!isSuccess && (
+        {!isUnauthorizedAccess && (
           <Stack direction="row" mt={50}>
             <Flex
               width="100vh"
@@ -98,34 +125,22 @@ function SignUpPanel() {
               <Stack direction="column" justify="center"></Stack>
               <Wrap spacing="20px" mt={3}>
                 <Input
-<<<<<<< HEAD
                   name="First Name"
                   data-testid="First Name"
-=======
-                  name="firstName"
-                  data-testid="firstname"
->>>>>>> edits
                   placeholder="First Name"
-                  value={inputValue.firstName}
+                  value={inputValue.firstname}
                   variant="outline"
                   onChange={handleInput}
-                  required
                   mb={3}
                   background="white"
                 ></Input>
                 <Input
-<<<<<<< HEAD
                   name="Last Name"
                   data-testid="Last Name"
-=======
-                  name="lastName"
-                  data-testid="lastname"
->>>>>>> edits
                   placeholder="Last Name"
-                  value={inputValue.lastName}
+                  value={inputValue.lastname}
                   variant="outline"
                   onChange={handleInput}
-                  required
                   mb={3}
                   background="white"
                 ></Input>
@@ -136,7 +151,6 @@ function SignUpPanel() {
                   value={inputValue.email}
                   variant="outline"
                   onChange={handleInput}
-                  required
                   mb={3}
                   background="white"
                 ></Input>
@@ -148,7 +162,6 @@ function SignUpPanel() {
                   variant="outline"
                   type="password"
                   onChange={handleInput}
-                  required
                   mb={3}
                   background="white"
                 ></Input>
@@ -177,19 +190,17 @@ function SignUpPanel() {
                 </Wrap>
                 <Link href="/SignUp" color="blue" mt={6}>
                 </Link>
-<<<<<<< HEAD
                 <Text fontSize = "s" > Already have an account? <a href="/login"><u>Log in</u></a> 
                 </Text>
                 <Text fontSize = "s" > Forgot username or password? <a href="/login"><u>Reset username/password</u></a> 
-=======
-                <Text fontSize = "s" > Already have an account? <Link to= '/cas-login' data-testid = "loginlink" style={{textDecoration: 'underline'}}> Log in </Link>
                 </Text>
-                <Text fontSize = "s" > Forgot your password? <Link to= '/cas-forgot' data-testid = "forgotlink" style={{textDecoration: 'underline'}}> Reset Password </Link>
->>>>>>> edits
-                </Text>
-              
+                {isPopUpInvalid && (
+                  <Text data-testid="invalidInput" color="red">
+                    *Invalid Credential*
+                  </Text>
+                )}
                 <Wrap justify="center">
-                  <Text fontSize="xs" mt={ 3 }>
+                  <Text fontSize="xs" mt={isPopUpInvalid ? 3 : 6}>
                     Healthcare System
                   </Text>
                 </Wrap>
@@ -197,12 +208,16 @@ function SignUpPanel() {
             </Flex>
           </Stack>
         )}
+      </Flex>
+      {!isUnauthorizedAccess && (
+        <Flex height="50vh" justifyContent="center" background="blue.500">
+          <Wrap justify="center" mt={10}>
+            <Text fontSize="x-large" mt={6}>
+            </Text>
+          </Wrap>
         </Flex>
+      )}
     </div>
   );
 }
-<<<<<<< HEAD
-=======
-export default SignUpPanel;
->>>>>>> edits
   
