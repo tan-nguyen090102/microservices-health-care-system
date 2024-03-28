@@ -6,6 +6,7 @@ function App() {
   return (
     <Routes>
       <Route path="/admin-home" element={<HomePanel></HomePanel>}></Route>
+      <Route></Route>
     </Routes>
   );
 }
