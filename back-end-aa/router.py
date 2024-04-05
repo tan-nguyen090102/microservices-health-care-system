@@ -1,4 +1,5 @@
-from flask import Blueprint, jsonify, request, session
+import json
+from flask import Blueprint, jsonify, request, session, abort
 from flask_cors import cross_origin
 from database_connection import database
 from authentication import url_login_service, user_login_service, logout_service, default_service
@@ -60,3 +61,29 @@ def get_user_list():
         if "firstName" in json_object:
             response = insert_user_service(database, json_object)
         return response
+
+
+@auth_bp.route("/cas-forgot-pw", methods = ["POST"])
+@cross_origin(supports_credentials=True)
+def forgotPassword(database = database):      
+    json_object = request.json
+    if "userID" in json_object:
+        result = user_login_forgot_pw_service(database=database, json_object=json_object)
+        return json.dumps(result)
+    else:
+        #abort(400, description="Invalid input, please populate userid")
+        response = dict(status = "failure", errorMessage = "Invalid input, please populate userid")
+        return json.dumps(response)
+
+
+@auth_bp.route("/cas-change-pw", methods = ["POST"])
+@cross_origin(supports_credentials=True)
+def ChangePw(database = database):      
+    json_object = request.json
+    print("In router ChangePw method", json_object)
+    validationResponse = validate_change_pw_input(json_object)
+    if validationResponse["status"] == "failure":
+        return json.dumps(validationResponse)
+    result = user_login_change_pw_service(database=database, json_object=json_object)
+    return json.dumps(result)
+    

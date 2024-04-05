@@ -1,8 +1,8 @@
 import React, { useEffect } from "react";
 import { Link } from "react-router-dom";
+import {useLocation, useNavigate} from 'react-router-dom';
+import {CHANGE_PASSWORD_ROUTER_PATH, LOGIN_PATH, SIGN_UP_PATH, FORGOT_PASSWORD_PATH} from "./links"
 import './App.css';
-import { useNavigate } from "react-router-dom";
-
 import {
   Flex,
   Stack,
@@ -12,38 +12,56 @@ import {
   Text,
   Input,
 } from "@chakra-ui/react";
-import {LOGIN_PATH, SIGN_UP_PATH, CHANGE_PASSWORD_PATH, FORGOT_PASSWORD_ROUTER_PATH} from "./links"
 
 
-function Forgot() {
+function ChangePw() {
   //State variables
   const [isValid, setIsValid] = React.useState(false);
   const serverIP = window.location.hostname;
-  const [userID, setUserID] = React.useState("");
+  const [password, setPassword] = React.useState("");
+  const [passwordConfirm, setPasswordConfirm] = React.useState("");
   const [errorMessage,setErrorMessage] = React.useState("");
   const [isSuccess, setIsSuccess] = React.useState(false);
-  //const [authCode, setAuthCode] = React.useState("");
+  const location = useLocation();
+  //const history = useHistory();
   const navigate = useNavigate();
+  const [userID, setUserID] = React.useState("");
 
   //Functions
-  const handleInput = (e) => {
+  useEffect(() => {
+    debugger
+    if(location.state == null
+      || location.state.userID === undefined 
+      || location.state.userID === "" 
+      || location.state.authCode === undefined 
+      || location.state.authCode === ""){
+        navigateToForgotPw()
+      }
+      else{
+        setUserID(location.state.userID)
+      }
+        }, []);
+
+  const handlePasswordInput = (e) => {
     const value  = e.target.value;
-    setUserID (value)
-    setIsValid(validateEmail(value))
-  };
-  const validateEmail = (email)=> {
-    return String(email)
-    .toLowerCase()
-    .match(
-      /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|.(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
-    );
+    setPassword(value)
+    //setIsValid(validatePassword())
   };
 
-  
-  const handleForgotpwSubmit = async() => {
+  const handlePasswordConfirmInput = (e) => {
+    const value  = e.target.value;
+    setPasswordConfirm(value)
+    //setIsValid(validatePassword())
+  };
+
+  const validatePassword = () => {
+    return password.length > 8 && password===passwordConfirm
+  };
+
+  const handleChangePwSubmit = () => {
     setErrorMessage("")
     setIsSuccess(false) 
-    const response = await fetch("http://" + serverIP + ":5000"+FORGOT_PASSWORD_ROUTER_PATH, {
+    fetch("http://" + serverIP + ":5000" + CHANGE_PASSWORD_ROUTER_PATH, {
       method: "POST",
       headers: {
         Accept: "application/json",
@@ -52,32 +70,32 @@ function Forgot() {
       mode: "cors",
       credentials: "include",
       body: JSON.stringify({
-        userID: userID
-       
+        userID: location.state.userID, 
+        authCode: location.state.authCode,
+        password: password,
+        passwordConfirm: passwordConfirm,
+    
       }),
     })
-    ?.then((response) => response.json())
-    .then((data) => {
-        debugger
+      ?.then((response) => response.json())
+      .then((data) => {
         console.log(data)
         if(data.status === "failure"){
           setErrorMessage(data.errorMessage) 
         }
         else{
-          navigateToChangePw(data.resetCode) 
+          setIsSuccess(true)  
+          window.history.replaceState({},'')
         }
-
-           
-        //setAuthCode(data)   
-        //navigateToChangePw(data) 
+          
       })
       .catch((err) => {
         console.log(err)
         setErrorMessage("Unable to connect to server. Try again later")
-     });
+      });
   };
-  const navigateToChangePw = (authCode) => {
-    navigate(CHANGE_PASSWORD_PATH, {state:{userID:userID,authCode:authCode}});
+  const navigateToForgotPw = () => {
+    navigate(FORGOT_PASSWORD_PATH);
   }
 
   return (
@@ -100,13 +118,13 @@ function Forgot() {
               rounded={6}
             >
               <Stack direction="row" justify="left">
-                <Heading mb={3}>Forgot Password</Heading>
+                <Heading mb={3}>Change Password</Heading>
               </Stack>
               <Stack direction="column" justify="center"></Stack>
               {isSuccess && (
                 <Wrap justify="center" mt={10}>
                   <Text fontSize="x-large" mt={3} color="green" data-testid="successMessage-text">
-                    <b>Success! Please change your password.</b>
+                    <b>Password successfully changed. Please go to login.</b>
                   </Text>
                 </Wrap>
               )}
@@ -121,13 +139,35 @@ function Forgot() {
 
               <>
               <Wrap spacing="20px" mt={3}>
-                <Input
+              <Input
                   name="userID"
                   data-testid="userID-input"
                   placeholder="Email"
-                  value={userID}
+                  value = {userID}
                   variant="outline"
-                  onChange={handleInput}
+                  mb={3}
+                  background="white"
+                  isDisabled={true}
+                ></Input>
+
+                <Input
+                  name="password"
+                  data-testid="password-input"
+                  placeholder="New Password"
+                  value={password}
+                  variant="outline"
+                  onChange={handlePasswordInput}
+                  mb={3}
+                  background="white"
+                ></Input>
+
+                <Input
+                  name="passwordConfirm"
+                  data-testid="passwordConfirm-input"
+                  placeholder="Confirm Password"
+                  value={passwordConfirm}
+                  variant="outline"
+                  onChange={handlePasswordConfirmInput}
                   mb={3}
                   background="white"
                 ></Input>
@@ -136,14 +176,14 @@ function Forgot() {
               <Stack direction="column" spacing={3}>
                 <Wrap spacing="20px" mt={6}>
                   <Button 
-                    isDisabled={!isValid}
-                    data-testid="forgotpasswordButton"
+                    isDisabled={!validatePassword()}
+                    data-testid="changePasswordButton"
                     colorScheme="blue"
                     onClick={() => {
-                      handleForgotpwSubmit();
+                      handleChangePwSubmit();
                     }}
                   >
-                    Submit
+                    Change Password
                   </Button>
                  
                 </Wrap>
@@ -171,12 +211,12 @@ function Forgot() {
             >
               <Stack direction="column" spacing={3}>
                 <Wrap spacing="20px" mt={6}>
-                  <Link data-testid="login-link" to={LOGIN_PATH} color="blue" mt={6}>
+                <Link data-testid="login-link" to={LOGIN_PATH} color="blue" mt={6}>
                     Go to Login
                   </Link>
                 </Wrap>
                 <Wrap>
-                  <Link data-testid="sign-up-link" to={SIGN_UP_PATH} color="blue" mt={6}>
+                <Link data-testid="sign-up-link" to={SIGN_UP_PATH} color="blue" mt={6}>
                     Sign Up Now
                   </Link>
                 </Wrap>
@@ -198,4 +238,4 @@ function Forgot() {
 }
 
 
-export default Forgot;
+export default ChangePw;

@@ -206,7 +206,7 @@ export default function LoginPanel() {
                     Sign Up
                   </Button>
                 </Wrap>
-                <Link href="/forgot_password" color="blue" mt={6}>
+                <Link to={"/forgotpw"} color="blue" mt={6}>
                   Forgot your Password?
                 </Link>
                 {isPopUpInvalid && (
