@@ -32,4 +32,8 @@ function Medications() {
     </div>
   )
 }
+<<<<<<< HEAD
 export default Medications;
+=======
+export default Medications;
+>>>>>>> patient home page and sign up page

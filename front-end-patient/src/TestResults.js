@@ -32,4 +32,8 @@ function TestResults() {
     </div>
   )
 }
+<<<<<<< HEAD
 export default TestResults;
+=======
+export default TestResults;
+>>>>>>> patient home page and sign up page

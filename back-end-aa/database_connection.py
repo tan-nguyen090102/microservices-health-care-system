@@ -8,7 +8,11 @@ def call_stored_procedure(connection, procedure_name, parameters):
     try:
         database_response = None
         cursor.callproc(procedure_name, parameters)
+<<<<<<< HEAD
         function_matches = ["select", "check", "get","update"]
+=======
+        function_matches = ["select", "check", "get", "insert"]
+>>>>>>> patient home page and sign up page
         if any(x in procedure_name for x in function_matches):
             database_response = cursor.fetchall()
         print(f"'{procedure_name}' executed in MySQL.")

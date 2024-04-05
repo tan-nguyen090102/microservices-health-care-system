@@ -32,4 +32,8 @@ function Visits () {
     </div>
   )
 }
+<<<<<<< HEAD
 export default Visits;
+=======
+export default Visits;
+>>>>>>> patient home page and sign up page

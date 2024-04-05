@@ -32,4 +32,8 @@ function Messages() {
     </div>
   )
 }
+<<<<<<< HEAD
 export default Messages;
+=======
+export default Messages;
+>>>>>>> patient home page and sign up page

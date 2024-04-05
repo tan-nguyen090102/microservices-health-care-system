@@ -22,3 +22,7 @@ def user_signup_service(database, json_object):
       return {"status": "Success"}
   
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> patient home page and sign up page

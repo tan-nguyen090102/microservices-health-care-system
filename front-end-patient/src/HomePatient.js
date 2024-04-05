@@ -146,4 +146,8 @@ export default function HomePanel() {
         )}
       </Flex>
     </div>
+<<<<<<< HEAD
   )};
+=======
+  )};
+>>>>>>> patient home page and sign up page

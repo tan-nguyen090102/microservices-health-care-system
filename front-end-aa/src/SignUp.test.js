@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 import '@testing-library/jest-dom';
 import { act, cleanup, render, screen, waitFor } from '@testing-library/react';
 import SignUpPanel from './SignUp';
@@ -5,6 +6,15 @@ import { BrowserRouter } from 'react-router-dom';
 import userEvent from '@testing-library/user-event';
 import { testObject } from './testData';
 import React from 'react';
+=======
+import "@testing-library/jest-dom";
+import { act, cleanup, render, screen, waitFor } from "@testing-library/react";
+import SignUpPanel from "./SignUp";
+import { BrowserRouter } from "react-router-dom";
+import userEvent from "@testing-library/user-event";
+import { testObject } from "./testUser";
+import React from "react";
+>>>>>>> patient home page and sign up page
 
 //Clean up after each test
 afterEach(() => {
@@ -20,7 +30,7 @@ global.fetch = jest.fn(() =>
 
 let spy = jest.SpyInstance;
 beforeEach(() => {
-    spy = jest.spyOn(console, 'error').mockImplementation(() => null);
+    spy = jest.spyOn(console, "error").mockImplementation(() => null);
 })
 afterEach(() => {
     spy.mockRestore();
@@ -39,7 +49,7 @@ test("first name input", async () => {
     });
 });
 
-test('last name input', async () => {
+test("last name input", async () => {
     render(
         <BrowserRouter>
             <SignUpPanel />
@@ -52,7 +62,7 @@ test('last name input', async () => {
     });
 })
 
-test('email', async () => {
+test("email", async () => {
     render(
         <BrowserRouter>
             <SignUpPanel />
@@ -65,7 +75,7 @@ test('email', async () => {
     });
 })
 
-test('password', async () => {
+test("password", async () => {
     render(
         <BrowserRouter>
             <SignUpPanel />

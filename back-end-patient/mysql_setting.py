@@ -8,7 +8,7 @@ class Setting():
             "password": "12345",
             "server": "localhost",
             "port": 3306,
-            "db": "patient_db",
+            "db": "dev_db",
         }
         self.database_setup = None
 

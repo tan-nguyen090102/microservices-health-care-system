@@ -11,7 +11,7 @@ auth_bp = Blueprint("auth_bp", __name__)
 def signup(database = database):      
     if request.method == "POST":
         json_object = request.json
-        if "userID" in json_object:
+        if "email" in json_object:
             response = user_signup_service(database=database, json_object=json_object)
 
     return response

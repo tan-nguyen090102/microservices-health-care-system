@@ -75,4 +75,8 @@ function PatientDashboard() {
   );
 }
 
+<<<<<<< HEAD
 export default PatientDashboard;
+=======
+export default PatientDashboard;
+>>>>>>> patient home page and sign up page

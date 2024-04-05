@@ -1,10 +1,15 @@
 <<<<<<< HEAD
+<<<<<<< HEAD
 import React, { useEffect } from "react";
 import { Link } from "react-router-dom";
 =======
 import React from 'react';
 import { Link } from 'react-router-dom';
 >>>>>>> back end patient
+=======
+import React from "react";
+import { Link } from "react-router-dom";
+>>>>>>> patient home page and sign up page
 import {
   Flex,
   Stack,
@@ -13,7 +18,7 @@ import {
   Button,
   Text,
   Input,
-} from '@chakra-ui/react';
+} from "@chakra-ui/react";
 
 export default function SignUpPanel() {
   const serverIP = window.location.hostname;
@@ -63,10 +68,10 @@ export default function SignUpPanel() {
   const [inputValue, setInputValue] = React.useState(initialValues);
 =======
   const initialValue = {
-    firstName: '',
-    lastName: '',
-    email: '',
-    password: '',
+    firstName: "",
+    lastName: "",
+    email: "",
+    password: "",
   }
 
   const [inputValue, setInputValue] = React.useState(initialValue);
@@ -81,17 +86,50 @@ export default function SignUpPanel() {
     setPopUpInvalid(false);
   };
 
+<<<<<<< HEAD
   //Handle login
   const [isPopUpInvalid, setPopUpInvalid] = React.useState(false);
+=======
+  const passwordRegex = [];
+  const isValidPassword = (password) => {
+    return passwordRegex.test(password);
+  };
+
+  const emailRegex = [];
+  const isValidEmail = (email) => {
+    return emailRegex.test(email);
+  }
+
+
+>>>>>>> patient home page and sign up page
   const handleSignUp = () => {
-    fetch("http://" + serverIP + ":3000/cas-signup", {
+    if (!inputValue.firstName || !inputValue.lastName || !inputValue.email || !inputValue.password) {
+      setErrorMessage("Please fill in all required fields.");
+      return;
+    }
+
+    if (!isValidPassword(inputValue.password)) {
+      setErrorMessage(
+        "Password must meet the following criteria:" +
+        "Be at least 8 characters long," +
+        "Have at least one number and one special character," +
+        "Have at least one lowercase and one uppercase character."
+      );
+      return;
+    }
+
+    if (!isValidEmail(inputValue.email)){
+      setErrorMessage("Please enter email in the correct format.");
+      return;
+    }
+
+    fetch("http://" + serverIP + ":5000/cas-signup", {
       method: "POST",
       headers: {
         Accept: "application/json",
         "content-type": "application/json; charset=UTF-8",
       },
       mode: "cors",
-      credentials: "include",
       body: JSON.stringify({
         firstname: inputValue.firstname,
         lastname: inputValue.lastname,
@@ -101,6 +139,7 @@ export default function SignUpPanel() {
     })
       ?.then((response) => response.json())
       .then((data) => {
+<<<<<<< HEAD
 <<<<<<< HEAD
         if (data[0] === "Authorized") {
           window.location = "http://" + data[1];
@@ -114,6 +153,20 @@ export default function SignUpPanel() {
       .catch((error) => { 
         setErrorMessage("Error");
 >>>>>>> back end patient
+=======
+        if (data.status === "Success") {
+          setIsSuccess(true);
+          setErrorMessage("");
+        }
+        else if (data.status === "Error") {
+          console.log(data.Message);
+          setErrorMessage(data.Message);
+        }
+      })
+      .catch((error) => { 
+        console.log(error);
+        setErrorMessage(error.message);
+>>>>>>> patient home page and sign up page
       });
   };
 
@@ -128,12 +181,28 @@ export default function SignUpPanel() {
       >
         {isUnauthorizedAccess && (
           <Wrap justify="center" mt={10}>
+<<<<<<< HEAD
             <Text fontSize="xxx-large" mt={3}>
               <b>401 Forbidden: Unauhorized Access.</b>
             </Text>
           </Wrap>
         )}
         {!isUnauthorizedAccess && (
+=======
+            <Text fontSize="x-large" mt={3} color="white" data-testid="successMessage-text">
+              <b>Success! Your account has been created.</b>
+            </Text>
+          </Wrap>
+        )}
+        {errorMessage && (
+          <Wrap justify="center" mt={10}>
+            <Text fontSize="x-large" mt={3} color="white" data-testid="errorMessage-text">
+              <b>{errorMessage}</b>
+            </Text>
+          </Wrap>
+        )}
+        {!isSuccess && (
+>>>>>>> patient home page and sign up page
           <Stack direction="row" mt={50}>
             <Flex
               width="100vh"
