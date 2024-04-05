@@ -1,0 +1,9 @@
+{
+    "change-url": "http://localhost:5000/cas-change-pw",
+    "forgot-url": "http://localhost:5000/cas-forgot-pw",
+    "target-url": "http://localhost:3000/forgotpw",
+    "post-request": 
+    {
+        "userID": "daniel.stone@yahoo.com"
+    }
+}
