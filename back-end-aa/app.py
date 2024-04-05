@@ -2,7 +2,7 @@ import os
 from flask import Flask
 from flask_session import Session
 from flask_cors import CORS
-from router import auth_bp
+from router import auth_bp, admin_bp
 from database_connection import database
 
 
@@ -21,6 +21,7 @@ if __name__ == "__main__":
     try:
         os.system('rm -rf flask_session/*')
         app.register_blueprint(auth_bp)
+        app.register_blueprint(admin_bp)
         app.run(host="0.0.0.0")
     finally:
         database.close()

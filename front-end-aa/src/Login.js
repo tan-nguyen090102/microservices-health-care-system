@@ -14,6 +14,9 @@ export default function LoginPanel() {
   const serverIP = window.location.hostname;
 
   const [isUnauthorizedAccess, setUnauthorizedAccess] = React.useState(false);
+  const [isServiceDown, setServiceDown] = React.useState(false);
+  const [whichService, setWhichServiceDown] = React.useState("");
+  const [errorMessage, setErrorMessage] = React.useState();
   useEffect(() => {
     document.title = "Healthcare System Authentication";
 
@@ -28,12 +31,16 @@ export default function LoginPanel() {
       body: JSON.stringify({}),
     })
       ?.then((response) => response.json())
-      .then((data) => {
-        console.log(data);
+      .then(async (data) => {
         //User has logged in
         if (data[0] !== "False") {
           setUnauthorizedAccess(false);
-          window.location = data[1];
+          const result = await fetch(data[1], {
+            method: "HEAD",
+          });
+          if (result.ok === true) {
+            window.location = data[1];
+          }
         } else {
           setUnauthorizedAccess(false);
 
@@ -43,7 +50,11 @@ export default function LoginPanel() {
           }
         }
       })
-      .catch((error) => console.log(error));
+      .catch((error) => {
+        setServiceDown(true);
+        setWhichServiceDown("Service is not available");
+        setErrorMessage(error.toString());
+      });
   }, [serverIP]);
 
   const initialValues = {
@@ -80,12 +91,22 @@ export default function LoginPanel() {
       }),
     })
       ?.then((response) => response.json())
-      .then((data) => {
+      .then(async (data) => {
         if (data[0] === "Authorized") {
-          window.location = "http://" + data[1];
+          const result = await fetch("http://" + data[1], {
+            method: "HEAD",
+          });
+          if (result.ok === true) {
+            window.location = "http://" + data[1];
+          }
         } else if (data[0] === "Invalid") {
           setPopUpInvalid(true);
         }
+      })
+      .catch((error) => {
+        setServiceDown(true);
+        setWhichServiceDown("Server is down at the moment");
+        setErrorMessage(error.toString());
       });
   };
 
@@ -96,7 +117,9 @@ export default function LoginPanel() {
         height="50vh"
         alignItems="baseline"
         justifyContent="left"
-        background={isUnauthorizedAccess ? "white" : "blue.500"}
+        background={
+          isUnauthorizedAccess || isServiceDown ? "white" : "blue.500"
+        }
       >
         {isUnauthorizedAccess && (
           <Wrap justify="center" mt={10}>
@@ -105,7 +128,17 @@ export default function LoginPanel() {
             </Text>
           </Wrap>
         )}
-        {!isUnauthorizedAccess && (
+        {isServiceDown && (
+          <Wrap justify="center" mt={10}>
+            <Text fontSize="xxx-large" mt={3}>
+              <Stack direction="column">
+                <b>404 {whichService}.</b>
+                <b>Error: {errorMessage}</b>
+              </Stack>
+            </Text>
+          </Wrap>
+        )}
+        {!isUnauthorizedAccess && !isServiceDown && (
           <Stack direction="row" mt={50}>
             <Flex
               width="100vh"
