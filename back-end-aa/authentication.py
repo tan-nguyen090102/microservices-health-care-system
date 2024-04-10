@@ -17,7 +17,7 @@ def url_login_service(json_object):
     
     # Check if  the user has logged in
     if "user" in session:
-        return json.dumps(["Authorize", user, id(session), session.get("authorizedID")])
+        return json.dumps(["Authorize", session.get("user"), id(session), session.get("authorizedID"), session.get("name")])
     else:
         return json.dumps(["False", user])
 
@@ -37,7 +37,8 @@ def user_login_service(database, json_object):
 
                 session["user"] = user[0]
                 session["authorizedID"] = user[5]
-                return json.dumps(["Authorized", session.get("url"), user[5]])
+                session["name"] = user[1] + " " + user[2]
+                return json.dumps(["Authorized", session.get("url"), user[5], session.get("name")])
             else:
                 continue
 
@@ -76,6 +77,7 @@ def user_login_forgot_pw_service(database, json_object):
         print("In user_login_forgot_pw_service Failed to find user",username)
         return dict(status = "failure", errorMessage = "Failed to find user")
 
+
 def user_login_change_pw_service(database, json_object): 
     print("In user_login_change_pw_service",json_object)     
     username = json_object["userID"]
@@ -103,6 +105,8 @@ def user_login_change_pw_service(database, json_object):
     else:
         print("In user_login_change_pw_service Failed to find user",username)
         return dict(status = "failure", errorMessage = "Failed to find user")
+    
+
 def validate_change_pw_input(json_object):
     print("In validate_change_pw_input  ", json_object)
     keys = ['userID', 'password', 'passwordConfirm', 'authCode']

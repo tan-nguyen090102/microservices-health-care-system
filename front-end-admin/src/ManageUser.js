@@ -218,7 +218,9 @@ export default function ManagePanel() {
 
   function CreateInsertModalBox(modalBox) {
     const initialValues = {
-      userID: "",
+      firstName: "",
+      lastName: "",
+      email: "",
       password: "",
     };
 
@@ -233,6 +235,34 @@ export default function ManagePanel() {
       });
 
       setPopUpInvalid(false);
+    };
+
+    const handleRefreshList = () => {
+      fetch("http://" + IP + ":5000/user-list", {
+        method: "POST",
+        headers: {
+          Accept: "application/json",
+          "content-type": "application/json; charset=UTF-8",
+        },
+        mode: "cors",
+        credentials: "include",
+        body: JSON.stringify({
+          requestCode: code,
+        }),
+      })
+        .then((response) => response.json())
+        .then((data) => {
+          if (data !== "False") {
+            setListOfUser(data);
+            setListOfUserSFX(CreateListOfUser(data));
+            setUserPresent(true);
+          } else {
+            setListOfUserSFX([]);
+            setListOfUser([]);
+            setUserPresent(false);
+          }
+          setServiceDown(false);
+        });
     };
 
     //Add button listener
@@ -271,8 +301,7 @@ export default function ManagePanel() {
           .then((response) => response.json())
           .then((data) => {
             if (data !== "False") {
-              setListOfUser(data);
-              setListOfUserSFX(CreateListOfUser(data));
+              handleRefreshList();
             } else {
               setListOfUserSFX([]);
               setListOfUser([]);

@@ -120,7 +120,6 @@ export default function HomePanel() {
     })
       .then((response) => response.json())
       .then((data) => {
-        console.log(data);
         if (data !== "False") {
           setListOfNoti(data);
           setListOfNotiSFX(CreateListOfNoti(data));
