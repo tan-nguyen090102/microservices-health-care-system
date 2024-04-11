@@ -42,6 +42,39 @@ INSERT INTO `notifications` VALUES ('N1','Example 1 for a very long message like
 UNLOCK TABLES;
 
 --
+-- Table structure for table `schedules`
+--
+
+DROP TABLE IF EXISTS `schedules`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `schedules` (
+  `id` varchar(16) NOT NULL,
+  `host_id` varchar(16) DEFAULT NULL,
+  `recipient_id` varchar(16) DEFAULT NULL,
+  `start_time` datetime DEFAULT NULL,
+  `end_time` datetime DEFAULT NULL,
+  `context` text,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `id_UNIQUE` (`id`),
+  KEY `host_id` (`host_id`),
+  KEY `recipient_id` (`recipient_id`),
+  CONSTRAINT `schedules_ibfk_1` FOREIGN KEY (`host_id`) REFERENCES `users` (`id`),
+  CONSTRAINT `schedules_ibfk_2` FOREIGN KEY (`recipient_id`) REFERENCES `users` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `schedules`
+--
+
+LOCK TABLES `schedules` WRITE;
+/*!40000 ALTER TABLE `schedules` DISABLE KEYS */;
+INSERT INTO `schedules` VALUES ('S2','U4','U1','2024-04-12 11:04:00','2024-04-12 00:04:00','Example Content'),('S3','U4','U2','2024-04-11 21:48:00','2024-04-11 22:48:00','Meet with the administrator'),('S4','U4','U1','2024-04-11 13:06:00','2024-04-11 14:06:00','Meet with the patient');
+/*!40000 ALTER TABLE `schedules` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
 -- Table structure for table `users`
 --
 
@@ -55,6 +88,7 @@ CREATE TABLE `users` (
   `email` varchar(255) DEFAULT NULL,
   `password` text,
   `authorization_code` varchar(1) DEFAULT NULL,
+  `password_reset_code` varchar(60) DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `id_UNIQUE` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
@@ -66,7 +100,7 @@ CREATE TABLE `users` (
 
 LOCK TABLES `users` WRITE;
 /*!40000 ALTER TABLE `users` DISABLE KEYS */;
-INSERT INTO `users` VALUES ('U1','Daniel','Stones','daniel.stone@yahoo.com','12345','P'),('U2','Well','Mark','well.mark@gmail.com','12345','A'),('U3','Alan','Turing','alan.turing@yahoo.com','12345','H'),('U5','Cold','Stone','cold.stone@gmail.com','12345','H'),('U6','Mark','Heart','mark.heart@gmail.com','12345','C');
+INSERT INTO `users` VALUES ('U1','Daniel','Stones','daniel.stone@yahoo.com','2024march','P','7ebb99a4-bbea-4b73-821f-6f14a29b41'),('U2','Well','Mark','well.mark@gmail.com','12345678901','A',''),('U3','Hay','Len','hay.len@gmail.com','12345','A',NULL),('U4','John','Long','john.long@gmail.com','1234','H',NULL);
 /*!40000 ALTER TABLE `users` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -139,6 +173,28 @@ DELIMITER ;
 /*!50003 SET character_set_client  = @saved_cs_client */ ;
 /*!50003 SET character_set_results = @saved_cs_results */ ;
 /*!50003 SET collation_connection  = @saved_col_connection */ ;
+/*!50003 DROP PROCEDURE IF EXISTS `select_from_table_with_condition` */;
+/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
+/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
+/*!50003 SET @saved_col_connection = @@collation_connection */ ;
+/*!50003 SET character_set_client  = utf8mb4 */ ;
+/*!50003 SET character_set_results = utf8mb4 */ ;
+/*!50003 SET collation_connection  = utf8mb4_0900_ai_ci */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = 'ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION' */ ;
+DELIMITER ;;
+CREATE DEFINER=`root`@`localhost` PROCEDURE `select_from_table_with_condition`(IN input_selection TEXT, IN input_table VARCHAR(225), IN input_condition TEXT)
+BEGIN
+	SET @select_from_table_with_condition = CONCAT("SELECT ", input_selection, " FROM ", input_table, " WHERE ", input_condition, ";");
+	PREPARE select_from_table_with_condition FROM @select_from_table_with_condition;
+    EXECUTE select_from_table_with_condition;
+    DEALLOCATE PREPARE select_from_table_with_condition;
+END ;;
+DELIMITER ;
+/*!50003 SET sql_mode              = @saved_sql_mode */ ;
+/*!50003 SET character_set_client  = @saved_cs_client */ ;
+/*!50003 SET character_set_results = @saved_cs_results */ ;
+/*!50003 SET collation_connection  = @saved_col_connection */ ;
 /*!50003 DROP PROCEDURE IF EXISTS `select_noti` */;
 /*!50003 SET @saved_cs_client      = @@character_set_client */ ;
 /*!50003 SET @saved_cs_results     = @@character_set_results */ ;
@@ -152,6 +208,25 @@ DELIMITER ;;
 CREATE DEFINER=`root`@`localhost` PROCEDURE `select_noti`(input_request_code VARCHAR(25))
 BEGIN
 	SELECT * FROM notifications WHERE recipient_code = input_request_code;
+END ;;
+DELIMITER ;
+/*!50003 SET sql_mode              = @saved_sql_mode */ ;
+/*!50003 SET character_set_client  = @saved_cs_client */ ;
+/*!50003 SET character_set_results = @saved_cs_results */ ;
+/*!50003 SET collation_connection  = @saved_col_connection */ ;
+/*!50003 DROP PROCEDURE IF EXISTS `select_schedule` */;
+/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
+/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
+/*!50003 SET @saved_col_connection = @@collation_connection */ ;
+/*!50003 SET character_set_client  = utf8mb4 */ ;
+/*!50003 SET character_set_results = utf8mb4 */ ;
+/*!50003 SET collation_connection  = utf8mb4_0900_ai_ci */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = 'ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION' */ ;
+DELIMITER ;;
+CREATE DEFINER=`root`@`localhost` PROCEDURE `select_schedule`(IN input_user VARCHAR(16), IN input_start_date DATETIME, IN input_end_date DATETIME)
+BEGIN
+	SELECT * FROM schedules s INNER JOIN users u ON s.recipient_id = u.id WHERE input_start_date <= s.start_time AND input_end_date >= s.end_time;
 END ;;
 DELIMITER ;
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
@@ -196,6 +271,46 @@ DELIMITER ;
 /*!50003 SET character_set_client  = @saved_cs_client */ ;
 /*!50003 SET character_set_results = @saved_cs_results */ ;
 /*!50003 SET collation_connection  = @saved_col_connection */ ;
+/*!50003 DROP PROCEDURE IF EXISTS `update_user_password` */;
+/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
+/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
+/*!50003 SET @saved_col_connection = @@collation_connection */ ;
+/*!50003 SET character_set_client  = utf8mb4 */ ;
+/*!50003 SET character_set_results = utf8mb4 */ ;
+/*!50003 SET collation_connection  = utf8mb4_0900_ai_ci */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = 'ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION' */ ;
+DELIMITER ;;
+CREATE DEFINER=`root`@`localhost` PROCEDURE `update_user_password`(in input_user_id VARCHAR(16), in input_user_password Text)
+BEGIN
+	UPDATE users set password = input_user_password , password_reset_code = '' where (id = input_user_id);
+    COMMIT;
+END ;;
+DELIMITER ;
+/*!50003 SET sql_mode              = @saved_sql_mode */ ;
+/*!50003 SET character_set_client  = @saved_cs_client */ ;
+/*!50003 SET character_set_results = @saved_cs_results */ ;
+/*!50003 SET collation_connection  = @saved_col_connection */ ;
+/*!50003 DROP PROCEDURE IF EXISTS `update_user_password_reset_code` */;
+/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
+/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
+/*!50003 SET @saved_col_connection = @@collation_connection */ ;
+/*!50003 SET character_set_client  = utf8mb4 */ ;
+/*!50003 SET character_set_results = utf8mb4 */ ;
+/*!50003 SET collation_connection  = utf8mb4_0900_ai_ci */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = 'ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION' */ ;
+DELIMITER ;;
+CREATE DEFINER=`root`@`localhost` PROCEDURE `update_user_password_reset_code`(in input_user_id VARCHAR(16), in input_user_password_reset_code VARCHAR(60))
+BEGIN
+	UPDATE users set password_reset_code = input_user_password_reset_code  where (id = input_user_id);
+    COMMIT;
+END ;;
+DELIMITER ;
+/*!50003 SET sql_mode              = @saved_sql_mode */ ;
+/*!50003 SET character_set_client  = @saved_cs_client */ ;
+/*!50003 SET character_set_results = @saved_cs_results */ ;
+/*!50003 SET collation_connection  = @saved_col_connection */ ;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
@@ -206,4 +321,4 @@ DELIMITER ;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2024-04-05 15:32:36
+-- Dump completed on 2024-04-09 22:09:00

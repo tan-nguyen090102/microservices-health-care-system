@@ -2,12 +2,14 @@ import json
 from flask import Blueprint, jsonify, request, session, abort
 from flask_cors import cross_origin
 from database_connection import database
-from authentication import url_login_service, user_login_service, logout_service, default_service
+from authentication import url_login_service, user_login_service, logout_service, default_service, user_login_change_pw_service, user_login_forgot_pw_service, validate_change_pw_input
 from admin import delete_noti_service, request_noti_service, request_user_service, delete_user_service, insert_user_service
+from schedule import fetch_date_event_service, insert_date_event_service, delete_date_event_service
 
 
 auth_bp = Blueprint("auth_bp", __name__)
 admin_bp = Blueprint("admin_bp", __name__)
+schedule_bp = Blueprint("schedule_bp", __name__)
 
 @auth_bp.route("/", methods = ["GET", "POST"])
 @cross_origin(supports_credentials=True)
@@ -86,4 +88,16 @@ def ChangePw(database = database):
         return json.dumps(validationResponse)
     result = user_login_change_pw_service(database=database, json_object=json_object)
     return json.dumps(result)
-    
+
+
+@schedule_bp.route("/schedule", methods = ["POST"])
+@cross_origin(supports_credentials=True)
+def scheduler(database = database):
+    json_object = request.json
+    if "userID" in json_object and "startTime" in json_object:
+        response = fetch_date_event_service(database, json_object)
+    if "recipientName" in json_object:
+        response = insert_date_event_service(database, json_object)
+    if "date" in json_object:
+        response = delete_date_event_service(database, json_object)
+    return response
