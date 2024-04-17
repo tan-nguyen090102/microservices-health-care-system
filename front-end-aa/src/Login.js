@@ -226,11 +226,63 @@ export default function LoginPanel() {
       </Flex>
       {!isUnauthorizedAccess && (
         <Flex height="50vh" justifyContent="center" background="blue.500">
-          <Wrap justify="center" mt={10}>
-            <Text fontSize="x-large" mt={6}>
-              Log in to other modules
-            </Text>
-          </Wrap>
+          <Stack direction="column">
+            <Wrap justify="center" mt={10}>
+              <Text fontSize="x-large" mt={6}>
+                Log in to other modules
+              </Text>
+            </Wrap>
+            <Stack direction="row">
+              <Button
+                name="patientButton"
+                data-testid="patientButton"
+                backgroundColor="blue.200"
+                variant="outline"
+              >
+                PATIENT
+              </Button>
+              <Button
+                name="physicianButton"
+                data-testid="physicianButton"
+                backgroundColor="teal.400"
+                variant="outline"
+              >
+                PHYSICIAN
+              </Button>
+              <Button
+                name="pharmacistButton"
+                data-testid="pharmacistButton"
+                backgroundColor="red.200"
+                variant="outline"
+              >
+                PHARMACIST
+              </Button>
+              <Button
+                name="labButton"
+                data-testid="labButton"
+                backgroundColor="yellow.200"
+                variant="outline"
+              >
+                LAB
+              </Button>
+              <Button
+                name="billingButton"
+                data-testid="billingButton"
+                backgroundColor="purple.200"
+                variant="outline"
+              >
+                BILLING
+              </Button>
+              <Button
+                name="adminButton"
+                data-testid="adminButton"
+                backgroundColor="green.200"
+                variant="outline"
+              >
+                ADMIN
+              </Button>
+            </Stack>
+          </Stack>
         </Flex>
       )}
     </div>
