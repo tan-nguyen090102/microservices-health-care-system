@@ -49,7 +49,6 @@ function SignUpPanel() {
       return;
     }
 
-
   const handleSignUp = () => {
     if (!inputValue.firstName || !inputValue.lastName || !inputValue.email || !inputValue.password) {
       setErrorMessage("Please fill in all required fields.");
