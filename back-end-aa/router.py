@@ -1,9 +1,5 @@
-<<<<<<< HEAD
 import json
 from flask import Blueprint, jsonify, request, session, abort
-=======
-from flask import Blueprint, jsonify, make_response, request, session
->>>>>>> patient home page and sign up page
 from flask_cors import cross_origin
 from database_connection import database
 from authentication import url_login_service, user_login_service, logout_service, default_service, user_login_change_pw_service, user_login_forgot_pw_service, validate_change_pw_input
@@ -11,7 +7,6 @@ from admin import delete_noti_service, request_noti_service, request_user_servic
 from schedule import fetch_date_event_service, insert_date_event_service, delete_date_event_service
 from signup_patient import user_signup_service
 
-from signup_patient import user_signup_service
 
 auth_bp = Blueprint("auth_bp", __name__)
 admin_bp = Blueprint("admin_bp", __name__)
@@ -68,8 +63,7 @@ def get_user_list():
             response = request_user_service(database, json_object)
         if "firstName" in json_object:
             response = insert_user_service(database, json_object)
-<<<<<<< HEAD
-        return response
+        return response@auth_bp.route("/cas-signup", methods=["GET", "POST", "OPTIONS"])
 
 
 @auth_bp.route("/cas-forgot-pw", methods = ["POST"])
@@ -109,16 +103,9 @@ def scheduler(database = database):
         response = delete_date_event_service(database, json_object)
     return response
 
-=======
-        return response@auth_bp.route("/cas-signup", methods=["GET", "POST", "OPTIONS"])
->>>>>>> patient home page and sign up page
 def signup():
     if request.method == "POST":
         json_object = request.json
         if "email" in json_object:
             response = user_signup_service(database=database, json_object=json_object)
-<<<<<<< HEAD
             return jsonify(response)
-=======
-            return jsonify(response)
->>>>>>> patient home page and sign up page

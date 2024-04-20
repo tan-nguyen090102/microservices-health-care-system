@@ -20,9 +20,3 @@ def user_signup_service(database, json_object):
     else:
       insert_user = call_stored_procedure(database, "insert_user", (firstName, lastName, email, pw))
       return {"status": "Success"}
-  
-
-<<<<<<< HEAD
-=======
-
->>>>>>> patient home page and sign up page
