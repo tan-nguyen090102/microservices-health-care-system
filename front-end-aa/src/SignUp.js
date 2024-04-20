@@ -31,15 +31,23 @@ function SignUpPanel() {
     })
   }
 
-  const passwordRegex = [];
-  const isValidPassword = (password) => {
-    return passwordRegex.test(password);
-  };
-
-  const emailRegex = [];
+  const emailRegex = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|.(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
   const isValidEmail = (email) => {
     return emailRegex.test(email);
   }
+
+  const handleSignUp = () => {
+    if (!inputValue.firstName || !inputValue.lastName || !inputValue.email || !inputValue.password) {
+      setErrorMessage("Please fill in all required fields.");
+      return;
+    }
+
+    if ((inputValue.password.length) < 8) {
+      setErrorMessage(
+        "Password must be at least 8 characters long."
+      );
+      return;
+    }
 
 
   const handleSignUp = () => {
