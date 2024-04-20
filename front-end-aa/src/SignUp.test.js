@@ -33,7 +33,7 @@ test("first name input", async () => {
         </BrowserRouter>
     );
     await act(() => {
-        const firstnameInputField = screen.getByTestId("firstname");
+        const firstnameInputField = screen.getByTestId("firstName");
         userEvent.type(firstnameInputField, testObject.firstname);
         expect(firstnameInputField).toHaveValue(testObject.firstname);
     });
@@ -46,7 +46,7 @@ test('last name input', async () => {
         </BrowserRouter>
     );
     await act(() => {
-        const lastnameInputField = screen.getByTestId("lastname");
+        const lastnameInputField = screen.getByTestId("lastName");
         userEvent.type(lastnameInputField, testObject.lastname);
         expect(lastnameInputField).toHaveValue(testObject.firstname);
     });
@@ -90,3 +90,32 @@ test("Signup button click", async () => {
         waitFor(() => expect(submitButton).toBeDefined());
     })
 })
+<<<<<<< HEAD
+=======
+
+test("login link", async () => {
+    render(
+        <BrowserRouter>
+            <SignUpPanel />
+        </BrowserRouter>
+    );
+    await act(() => {
+        const loginlink = screen.getByTestId("loginlink");
+        act(() => userEvent.click(loginlink));
+        waitFor(() => expect(loginlink).toBeDefined());
+    })
+})
+
+test("forgot link", async () => {
+    render(
+        <BrowserRouter>
+            <SignUpPanel />
+        </BrowserRouter>
+    );
+    await act(() => {
+        const resetlink = screen.getByTestId("forgotlink");
+        act(() => userEvent.click(resetlink));
+        waitFor(() => expect(resetlink).toBeDefined());
+    })
+})
+>>>>>>> back end patient
