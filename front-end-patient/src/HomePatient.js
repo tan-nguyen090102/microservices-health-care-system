@@ -1,6 +1,14 @@
 import React, { useEffect } from "react";
 import { useLocation } from "react-router-dom";
-import { Flex, Text, Wrap, Button } from "@chakra-ui/react";
+import { 
+  Flex, 
+  Stack, 
+  Heading, 
+  Text, 
+  Wrap,
+  Spacer,
+  Box
+} from "@chakra-ui/react";
 
 export default function HomePanel() {
   const loginIP = window.location.hostname;
@@ -61,30 +69,81 @@ export default function HomePanel() {
   return (
     <div>
       <Flex
-        height="50vh"
+        height="100vh"
         alignItems="baseline"
         justifyContent="left"
-        background={isUnauthorizedAccess ? "white" : "blue.500"}
+        background={isUnauthorizedAccess ? "white" : "blue.400"}
       >
         {isUnauthorizedAccess && (
           <Wrap justify="center" mt={10}>
             <Text fontSize="xxx-large" mt={3}>
-              <b>401 Forbidden: Unauhorized Access.</b>
+              <b>401 Forbidden: Unauthorized Access.</b>
             </Text>
           </Wrap>
         )}
         {!isUnauthorizedAccess && (
-          <Button
-            data-testid="logoutButton"
-            colorScheme="blue"
-            onClick={() => {
-              handleLogout();
-            }}
-          >
-            Logout
-          </Button>
+          <Stack direction="column" mt={50}>
+            <Flex
+              width="100%"
+              ml={100}
+              direction="column"
+              background="blue.200"
+              p={12}
+              rounded={6}
+            >
+              <Stack direction="row" justify="left">
+                <Heading mb={3}>Welcome!</Heading>
+              </Stack>
+              
+              <Box mt={4}> 
+                <Flex
+                  width="50vh"
+                  ml={100}
+                  direction="column"
+                  background="blue.100"
+                  p={12}
+                  rounded={6}
+                >
+                  <Stack direction="row" justify="left">
+                    <Heading size='md'>Upcoming Visits</Heading>
+                  </Stack>
+
+                  <Stack direction="column" justify="center">
+                    <Wrap spacing="20px" mt={3}>
+                      <Text fontSize="sm">Dates</Text>
+                    </Wrap>
+                  </Stack>
+
+                </Flex>
+              </Box>
+              
+              <Spacer />
+  
+              <Box mt={4}> 
+                <Flex
+                  width="50vh"
+                  ml={100}
+                  direction="column"
+                  background="blue.100"
+                  p={12}
+                  rounded={6}
+                >
+                  <Stack direction="row" justify="left">
+                    <Heading size='md'>Account Balance</Heading>
+                  </Stack>
+
+                  <Stack direction="column" justify="center">
+                    <Wrap spacing="20px" mt={3}>
+                      <Text fontSize="sm">Amount Due</Text>
+                    </Wrap>
+                  </Stack>
+                
+                </Flex>
+              </Box>
+  
+            </Flex>
+          </Stack>
         )}
       </Flex>
     </div>
-  );
-}
+  )};
