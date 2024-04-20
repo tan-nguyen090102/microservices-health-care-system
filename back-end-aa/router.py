@@ -5,6 +5,7 @@ from database_connection import database
 from authentication import url_login_service, user_login_service, logout_service, default_service, user_login_change_pw_service, user_login_forgot_pw_service, validate_change_pw_input
 from admin import delete_noti_service, request_noti_service, request_user_service, delete_user_service, insert_user_service
 from schedule import fetch_date_event_service, insert_date_event_service, delete_date_event_service
+from signup_patient import user_signup_service
 
 
 auth_bp = Blueprint("auth_bp", __name__)
@@ -101,3 +102,10 @@ def scheduler(database = database):
     if "date" in json_object:
         response = delete_date_event_service(database, json_object)
     return response
+
+def signup():
+    if request.method == "POST":
+        json_object = request.json
+        if "email" in json_object:
+            response = user_signup_service(database=database, json_object=json_object)
+            return jsonify(response)
