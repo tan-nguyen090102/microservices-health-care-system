@@ -103,6 +103,7 @@ def scheduler(database = database):
         response = delete_date_event_service(database, json_object)
     return response
 
+@auth_bp.route("/cas-signup", methods=["POST", "OPTIONS"])
 def signup():
     if request.method == "POST":
         json_object = request.json

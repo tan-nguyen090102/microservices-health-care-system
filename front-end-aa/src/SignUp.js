@@ -1,5 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import {SIGN_UP_PATH} from "./links"
 import {
   Flex,
   Stack,
@@ -31,16 +32,10 @@ function SignUpPanel() {
     })
   }
 
-  const passwordRegex = [];
-  const isValidPassword = (password) => {
-    return passwordRegex.test(password);
-  };
-
-  const emailRegex = [];
+  const emailRegex = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|.(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
   const isValidEmail = (email) => {
     return emailRegex.test(email);
   }
-
 
   const handleSignUp = () => {
     if (!inputValue.firstName || !inputValue.lastName || !inputValue.email || !inputValue.password) {
@@ -48,12 +43,9 @@ function SignUpPanel() {
       return;
     }
 
-    if (!isValidPassword(inputValue.password)) {
+    if ((inputValue.password.length) < 8) {
       setErrorMessage(
-        "Password must meet the following criteria:" +
-        "Be at least 8 characters long," +
-        "Have at least one number and one special character," +
-        "Have at least one lowercase and one uppercase character."
+        "Password must be at least 8 characters long."
       );
       return;
     }
@@ -63,7 +55,7 @@ function SignUpPanel() {
       return;
     }
 
-    fetch("http://" + serverIP + ":5000/cas-signup", {
+    fetch("http://" + serverIP + ":5000" + SIGN_UP_PATH, {
       method: "POST",
       headers: {
         Accept: "application/json",
@@ -75,6 +67,7 @@ function SignUpPanel() {
         lastName: inputValue.lastName,
         email: inputValue.email,
         password: inputValue.password,
+        authorizationCode: "P",
       }),
     })
       ?.then((response) => response.json())
