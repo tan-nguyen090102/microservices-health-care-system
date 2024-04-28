@@ -37,8 +37,38 @@ CREATE TABLE `notifications` (
 
 LOCK TABLES `notifications` WRITE;
 /*!40000 ALTER TABLE `notifications` DISABLE KEYS */;
-INSERT INTO `notifications` VALUES ('N1','Example 1 for a very long message like this on the notification system. We dont know if there is more','H','A'),('N2','Example 2 for a very long message like this on the notification system. We dont know if there is more','H','A');
+INSERT INTO `notifications` VALUES ('N1','Example 1 for a very long message like this on the notification system. We dont know if there is more','H','A'),('N2','Example 2 for a very long message like this on the notification system. We dont know if there is more','H','A'),('N4','Example N4 of the physician as recipient','A','H');
 /*!40000 ALTER TABLE `notifications` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `physician_patients`
+--
+
+DROP TABLE IF EXISTS `physician_patients`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `physician_patients` (
+  `id` varchar(5) NOT NULL,
+  `physician_id` varchar(16) DEFAULT NULL,
+  `patient_id` varchar(16) DEFAULT NULL,
+  `content` text,
+  PRIMARY KEY (`id`),
+  KEY `physician_id` (`physician_id`),
+  KEY `patient_id` (`patient_id`),
+  CONSTRAINT `physician_patients_ibfk_1` FOREIGN KEY (`physician_id`) REFERENCES `users` (`id`),
+  CONSTRAINT `physician_patients_ibfk_2` FOREIGN KEY (`patient_id`) REFERENCES `users` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `physician_patients`
+--
+
+LOCK TABLES `physician_patients` WRITE;
+/*!40000 ALTER TABLE `physician_patients` DISABLE KEYS */;
+INSERT INTO `physician_patients` VALUES ('PHPA2','U4','U1','Influenza'),('PHPA3','U6','U1','Common Cold'),('PHPA4','U6','U5','COVID-19');
+/*!40000 ALTER TABLE `physician_patients` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -70,7 +100,7 @@ CREATE TABLE `schedules` (
 
 LOCK TABLES `schedules` WRITE;
 /*!40000 ALTER TABLE `schedules` DISABLE KEYS */;
-INSERT INTO `schedules` VALUES ('S2','U4','U1','2024-04-12 11:04:00','2024-04-12 00:04:00','Example Content'),('S3','U4','U2','2024-04-11 21:48:00','2024-04-11 22:48:00','Meet with the administrator'),('S4','U4','U1','2024-04-11 13:06:00','2024-04-11 14:06:00','Meet with the patient');
+INSERT INTO `schedules` VALUES ('S2','U6','U3','2024-04-29 11:19:00','2024-04-29 12:19:00','Vaccination on COVID-19'),('S3','U6','U1','2024-04-29 14:20:00','2024-04-29 15:20:00','Cold checking temperature');
 /*!40000 ALTER TABLE `schedules` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -100,7 +130,7 @@ CREATE TABLE `users` (
 
 LOCK TABLES `users` WRITE;
 /*!40000 ALTER TABLE `users` DISABLE KEYS */;
-INSERT INTO `users` VALUES ('U1','Daniel','Stones','daniel.stone@yahoo.com','2024march','P','7ebb99a4-bbea-4b73-821f-6f14a29b41'),('U2','Well','Mark','well.mark@gmail.com','12345678901','A',''),('U3','Hay','Len','hay.len@gmail.com','12345','A',NULL),('U4','John','Long','john.long@gmail.com','1234','H',NULL);
+INSERT INTO `users` VALUES ('U1','Daniel','Stones','daniel.stone@yahoo.com','2024march','P','7ebb99a4-bbea-4b73-821f-6f14a29b41'),('U2','Well','Mark','well.mark@gmail.com','12345678901','A',''),('U3','Hay','Len','hay.len@gmail.com','12345','A',NULL),('U4','John','Long','john.long@gmail.com','1234','H',NULL),('U5','Hay','Len','hay.len@gmail.com','1234','P',NULL),('U6','Sam','Fly','sam.fly@gmail.com','1234','H',NULL);
 /*!40000 ALTER TABLE `users` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -214,6 +244,29 @@ DELIMITER ;
 /*!50003 SET character_set_client  = @saved_cs_client */ ;
 /*!50003 SET character_set_results = @saved_cs_results */ ;
 /*!50003 SET collation_connection  = @saved_col_connection */ ;
+/*!50003 DROP PROCEDURE IF EXISTS `select_physician_patient` */;
+/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
+/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
+/*!50003 SET @saved_col_connection = @@collation_connection */ ;
+/*!50003 SET character_set_client  = utf8mb4 */ ;
+/*!50003 SET character_set_results = utf8mb4 */ ;
+/*!50003 SET collation_connection  = utf8mb4_0900_ai_ci */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = 'ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION' */ ;
+DELIMITER ;;
+CREATE DEFINER=`root`@`localhost` PROCEDURE `select_physician_patient`(IN input_physician_id VARCHAR(16))
+BEGIN
+	SELECT *
+    FROM physician_patients p 
+    INNER JOIN users u
+    ON p.patient_id = u.id
+    WHERE input_physician_id = p.physician_id;
+END ;;
+DELIMITER ;
+/*!50003 SET sql_mode              = @saved_sql_mode */ ;
+/*!50003 SET character_set_client  = @saved_cs_client */ ;
+/*!50003 SET character_set_results = @saved_cs_results */ ;
+/*!50003 SET collation_connection  = @saved_col_connection */ ;
 /*!50003 DROP PROCEDURE IF EXISTS `select_schedule` */;
 /*!50003 SET @saved_cs_client      = @@character_set_client */ ;
 /*!50003 SET @saved_cs_results     = @@character_set_results */ ;
@@ -321,4 +374,4 @@ DELIMITER ;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2024-04-09 22:09:00
+-- Dump completed on 2024-04-27 23:24:25
