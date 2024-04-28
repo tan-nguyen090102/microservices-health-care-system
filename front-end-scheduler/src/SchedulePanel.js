@@ -209,8 +209,8 @@ export default function SchedulePanel() {
           <Tr>
             <Td>{item[0]}</Td>
             <Td>{item[2] + " " + item[3]}</Td>
-            <Td>{item[4]}</Td>
-            <Td>{item[5]}</Td>
+            <Td>{item[4].split(" ")[1]}</Td>
+            <Td>{item[5].split(" ")[1]}</Td>
             <Td>{item[6]}</Td>
           </Tr>
         </Tbody>

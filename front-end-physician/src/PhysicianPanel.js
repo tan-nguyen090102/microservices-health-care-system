@@ -17,9 +17,11 @@ import {
 export default function PhysicianPanel() {
   const IP = window.location.hostname;
   const location = useLocation();
+
   const [isNotiPresent, setNotiPresent] = React.useState(false);
   const [listOfNotiSFX, setListOfNotiSFX] = React.useState([]);
   const [listOfNoti, setListOfNoti] = React.useState([]);
+
   const [isUnauthorizedAccess, setUnauthorizedAccess] = React.useState(false);
   const [isServiceDown, setServiceDown] = React.useState(false);
   const [errorMessage, setErrorMessage] = React.useState();
@@ -66,7 +68,6 @@ export default function PhysicianPanel() {
             })
               .then((response) => response.json())
               .then((data) => {
-                console.log(data);
                 if (data !== "False") {
                   setListOfNoti(data);
                   setListOfNotiSFX(CreateListOfNoti(data));

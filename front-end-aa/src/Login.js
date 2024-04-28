@@ -9,6 +9,7 @@ import {
   Text,
   Input,
 } from "@chakra-ui/react";
+import HandleChooseLink from "./LinkToReturn";
 
 export default function LoginPanel() {
   const serverIP = window.location.hostname;
@@ -108,6 +109,20 @@ export default function LoginPanel() {
         setWhichServiceDown("Server is down at the moment");
         setErrorMessage(error.toString());
       });
+  };
+
+  const handleReroute = async (servicePath) => {
+    const result = await fetch(servicePath, {
+      method: "HEAD",
+    }).catch((error) => {
+      setServiceDown(true);
+      setWhichServiceDown("Server is down at the moment");
+      setErrorMessage(error.toString());
+    });
+
+    if (result?.ok === true) {
+      window.location = servicePath;
+    }
   };
 
   //DOM
@@ -238,6 +253,9 @@ export default function LoginPanel() {
                 data-testid="patientButton"
                 backgroundColor="blue.200"
                 variant="outline"
+                onClick={() => {
+                  handleReroute(HandleChooseLink("P"));
+                }}
               >
                 PATIENT
               </Button>
@@ -246,6 +264,9 @@ export default function LoginPanel() {
                 data-testid="physicianButton"
                 backgroundColor="teal.400"
                 variant="outline"
+                onClick={() => {
+                  handleReroute(HandleChooseLink("H"));
+                }}
               >
                 PHYSICIAN
               </Button>
@@ -254,6 +275,9 @@ export default function LoginPanel() {
                 data-testid="pharmacistButton"
                 backgroundColor="red.200"
                 variant="outline"
+                onClick={() => {
+                  handleReroute(HandleChooseLink("C"));
+                }}
               >
                 PHARMACIST
               </Button>
@@ -262,6 +286,9 @@ export default function LoginPanel() {
                 data-testid="labButton"
                 backgroundColor="yellow.200"
                 variant="outline"
+                onClick={() => {
+                  handleReroute(HandleChooseLink("L"));
+                }}
               >
                 LAB
               </Button>
@@ -270,6 +297,9 @@ export default function LoginPanel() {
                 data-testid="billingButton"
                 backgroundColor="purple.200"
                 variant="outline"
+                onClick={() => {
+                  handleReroute(HandleChooseLink("B"));
+                }}
               >
                 BILLING
               </Button>
@@ -278,6 +308,9 @@ export default function LoginPanel() {
                 data-testid="adminButton"
                 backgroundColor="green.200"
                 variant="outline"
+                onClick={() => {
+                  handleReroute(HandleChooseLink("A"));
+                }}
               >
                 ADMIN
               </Button>
