@@ -15,9 +15,11 @@ def user_signup_service(database, json_object):
     check_pw = call_stored_procedure(database, "check_pw", (password,))
 
     if check_user:
-      return {"status": "Error", "Message": "An account already exists for this email."}
+      response_data = {"status": "Error", "Message": "An account already exists for this email."}
+      return response_data
     elif check_pw:
-      return {"status": "Error", "Message": "Password is taken. Choose a different password."}
+      response_data = {"status": "Error", "Message": "Password is taken. Choose a different password."}
+      return response_data
     else:
       get_users = call_stored_procedure(database,"select_all_from_table", ("users",),)
 
@@ -36,4 +38,5 @@ def user_signup_service(database, json_object):
                            "id, first_name, last_name, email, password, authorization_code", 
                            "'U" + str(biggest_entry + 1) + "', '" + first_name + "', '" + last_name + "', '" + email + "', '" + password + "', '" + authorization_code + "'"),)
       database.commit()
-      return {"status": "Success"}
+      response_data = {"status": "Success"}
+      return response_data
