@@ -143,4 +143,8 @@ export default function Medications() {
         )}
       </Flex>
     </div>
+<<<<<<< HEAD
   )}
+=======
+  )}
+>>>>>>> sign-up-page

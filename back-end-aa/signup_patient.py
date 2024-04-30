@@ -22,6 +22,7 @@ def user_signup_service(database, json_object):
       return response_data
     else:
       get_users = call_stored_procedure(database,"select_all_from_table", ("users",),)
+<<<<<<< HEAD
 
       if get_users is not None:
             biggest_entry = 0
@@ -40,4 +41,23 @@ def user_signup_service(database, json_object):
       database.commit()
       response_data = {"status": "Success"}
       return response_data
+=======
+>>>>>>> sign-up-page
 
+      if get_users is not None:
+            biggest_entry = 0
+            for user in get_users:
+              id = int([*(user[0])][1])
+
+            if (biggest_entry < id):
+                biggest_entry = id
+
+      
+      result = call_stored_procedure(database, 
+                          "insert_entry", 
+                          ("users", 
+                           "id, first_name, last_name, email, password, authorization_code", 
+                           "'U" + str(biggest_entry + 1) + "', '" + first_name + "', '" + last_name + "', '" + email + "', '" + password + "', '" + authorization_code + "'"),)
+      database.commit()
+      response_data = {"status": "Success"}
+      return response_data

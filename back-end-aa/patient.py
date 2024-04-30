@@ -97,4 +97,8 @@ def get_patient_visits(database, userID):
         }
         datas.append(data)
   
+<<<<<<< HEAD
     return jsonify(datas)
+=======
+    return jsonify(datas)
+>>>>>>> sign-up-page

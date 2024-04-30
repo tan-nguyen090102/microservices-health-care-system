@@ -187,9 +187,13 @@ def get_visits(userID, database=database):
         response.headers["Access-Control-Allow-Headers"] = "Content-Type, Authorization"
         return response, 200
     response = get_patient_visits(database, userID)
+<<<<<<< HEAD
     return response
 
 
 
 
 
+=======
+    return response
+>>>>>>> sign-up-page
