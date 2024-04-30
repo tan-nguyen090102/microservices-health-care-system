@@ -14,6 +14,7 @@ auth_bp = Blueprint("auth_bp", __name__)
 admin_bp = Blueprint("admin_bp", __name__)
 schedule_bp = Blueprint("schedule_bp", __name__)
 physician_bp = Blueprint("physician_bp", __name__)
+patient_bp = Blueprint("patien_bp", __name__)
 
 @auth_bp.route("/", methods = ["GET", "POST"])
 @cross_origin(supports_credentials=True)
@@ -187,13 +188,9 @@ def get_visits(userID, database=database):
         response.headers["Access-Control-Allow-Headers"] = "Content-Type, Authorization"
         return response, 200
     response = get_patient_visits(database, userID)
-<<<<<<< HEAD
     return response
 
 
 
 
 
-=======
-    return response
->>>>>>> sign-up-page
