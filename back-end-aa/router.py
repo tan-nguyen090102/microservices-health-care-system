@@ -6,13 +6,14 @@ from authentication import url_login_service, user_login_service, logout_service
 from admin import delete_noti_service, request_noti_service, request_user_service, delete_user_service, insert_user_service
 from schedule import fetch_date_event_service, insert_date_event_service, delete_date_event_service
 from signup_patient import user_signup_service
+from physician import request_physician_patient_service, delete_physician_patient_service, insert_physician_patient_service
 from patient import insert_patient_info, get_patient_info, get_patient_medication, get_patient_visits
 
 
 auth_bp = Blueprint("auth_bp", __name__)
 admin_bp = Blueprint("admin_bp", __name__)
 schedule_bp = Blueprint("schedule_bp", __name__)
-patient_bp = Blueprint("patient_bp", __name__)
+physician_bp = Blueprint("physician_bp", __name__)
 
 @auth_bp.route("/", methods = ["GET", "POST"])
 @cross_origin(supports_credentials=True)
@@ -54,6 +55,21 @@ def deleteNoti():
         return response
     
 
+@physician_bp.route("/physician-patient", methods = ["GET", "POST"])
+@cross_origin(supports_credentials=True)
+def physician_patient():
+    if request.method == "POST":
+        json_object = request.json
+        if "phpaID" in json_object:
+            response = delete_physician_patient_service(database, json_object)
+        if "userID" in json_object and "phpaID" not in json_object:
+            response = request_physician_patient_service(database, json_object)
+        if "patientName" in json_object:
+            response = insert_physician_patient_service(database, json_object)
+        
+        return response
+    
+
 @admin_bp.route("/user-list", methods = ["GET", "POST"])
 @cross_origin(supports_credentials=True)
 def get_user_list():
@@ -65,7 +81,7 @@ def get_user_list():
             response = request_user_service(database, json_object)
         if "firstName" in json_object:
             response = insert_user_service(database, json_object)
-        return response@auth_bp.route("/cas-signup", methods=["GET", "POST", "OPTIONS"])
+        return response
 
 
 @auth_bp.route("/cas-forgot-pw", methods = ["POST"])
@@ -104,7 +120,6 @@ def scheduler(database = database):
     if "date" in json_object:
         response = delete_date_event_service(database, json_object)
     return response
-
 
 
 @auth_bp.route("/cas-signup", methods=["POST", "OPTIONS"])
@@ -173,8 +188,3 @@ def get_visits(userID, database=database):
         return response, 200
     response = get_patient_visits(database, userID)
     return response
-
-
-
-
-
