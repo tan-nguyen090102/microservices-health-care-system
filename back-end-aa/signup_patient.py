@@ -31,7 +31,7 @@ def user_signup_service(database, json_object):
             if (biggest_entry < id):
                 biggest_entry = id
 
-      # Insert the new user into the database
+      
       result = call_stored_procedure(database, 
                           "insert_entry", 
                           ("users", 
