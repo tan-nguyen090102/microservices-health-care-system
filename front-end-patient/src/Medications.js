@@ -1,13 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
-import { 
-  Flex, 
-  Stack, 
-  Heading, 
-  Text, 
-  Wrap,
-  Box
-} from "@chakra-ui/react";
+import { Flex, Stack, Heading, Text, Wrap, Box } from "@chakra-ui/react";
 
 export default function Medications() {
   const loginIP = window.location.hostname;
@@ -68,16 +61,15 @@ export default function Medications() {
       });
   };
 
-
   const [medicationInfo, setMedicationInfo] = useState(null);
 
   const fetchPatientMedicationInfo = (userID) => {
-    console.log(userID)
+    console.log(userID);
     fetch(`http://${loginIP}:5000/patient-info-survey/${userID}`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
-      }
+      },
     })
       .then((response) => response.json())
       .then((data) => {
@@ -88,7 +80,6 @@ export default function Medications() {
         console.error("Error fetching patient medication information:", error);
       });
   };
-
 
   return (
     <div>
@@ -124,27 +115,27 @@ export default function Medications() {
                 <Stack direction="row" justify="left">
                   <Heading mb={3}>Medications</Heading>
                 </Stack>
-                {medicationInfo && medicationInfo.map((patient, index) => (
-                  <Flex 
-                    key={index} 
-                    direction="column" 
-                    background="blue.100" 
-                    p={4} 
-                    rounded={6} 
-                    mt={4}
-                  >
-                    <Heading size="md">{patient.fullName}</Heading>
-                    <Text><b>Current Medications:</b> {patient.medications}</Text>
-                  </Flex>
-                ))}
+                {medicationInfo &&
+                  medicationInfo.map((patient, index) => (
+                    <Flex
+                      key={index}
+                      direction="column"
+                      background="blue.100"
+                      p={4}
+                      rounded={6}
+                      mt={4}
+                    >
+                      <Heading size="md">{patient.fullName}</Heading>
+                      <Text>
+                        <b>Current Medications:</b> {patient.medications}
+                      </Text>
+                    </Flex>
+                  ))}
               </Flex>
             </Stack>
           </Flex>
         )}
       </Flex>
     </div>
-<<<<<<< HEAD
-  )}
-=======
-  )}
->>>>>>> sign-up-page
+  );
+}

@@ -256,7 +256,7 @@ export default function PhysicianPanel() {
                 <Button
                   backgroundColor="teal.100"
                   rounded={20}
-                  onClick={() => handleNavigate("physician-home", "", "")}
+                  onClick={() => handleNavigate("/physician-home", "", "")}
                 >
                   HOME
                 </Button>

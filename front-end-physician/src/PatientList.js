@@ -246,6 +246,7 @@ export default function PatientPanel() {
       }).catch((error) => {
         setServiceDown(true);
         setErrorMessage(error.toString());
+        alert(error);
       });
 
       if (result?.ok === true) {
@@ -286,12 +287,16 @@ export default function PatientPanel() {
           >
             <Stack direction="row" justifyContent="flex-end">
               <List marginRight="auto">
-                <ListItem>Patient ID: {item[2]}</ListItem>
-                <ListItem>
-                  Patient Name: {item[4]} {item[5]}
-                </ListItem>
-                <ListItem>Patient email: {item[6]}</ListItem>
-                <ListItem>Primary care: {item[3]}</ListItem>
+                <ListItem>Patient ID: {item[1]}</ListItem>
+                <ListItem>Name: {item[2]}</ListItem>
+                <ListItem>Age: {item[3]}</ListItem>
+                <ListItem>Date of Birth: {item[4]}</ListItem>
+                <ListItem>Gender: {item[6]}</ListItem>
+                <ListItem>Phone #: {item[5]}</ListItem>
+                <ListItem>Primary care: {item[7]}</ListItem>
+                <ListItem>Medication: {item[8]}</ListItem>
+                <ListItem>Family History: {item[9]}</ListItem>
+                <ListItem>Medication History: {item[10]}</ListItem>
               </List>
               <Button
                 data-testid="deleteButton"
@@ -604,16 +609,6 @@ export default function PatientPanel() {
                   Add Patient
                 </Button>
                 {CreateInsertModalBox(modalBox)}
-                {isServiceDown && (
-                  <Wrap justify="center" mt={10}>
-                    <Text fontSize="medium" mt={3}>
-                      <Stack direction="column">
-                        <b>404 Service is not Available.</b>
-                        <b>Error: {errorMessage}</b>
-                      </Stack>
-                    </Text>
-                  </Wrap>
-                )}
               </Stack>
             </Flex>
           </Flex>

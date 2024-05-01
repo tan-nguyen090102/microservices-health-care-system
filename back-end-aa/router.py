@@ -8,6 +8,7 @@ from schedule import fetch_date_event_service, insert_date_event_service, delete
 from signup_patient import user_signup_service
 from physician import request_physician_patient_service, delete_physician_patient_service, insert_physician_patient_service
 from patient import insert_patient_info, get_patient_info, get_patient_medication, get_patient_visits
+from fhir_service import request_fhir_patient_service
 
 
 auth_bp = Blueprint("auth_bp", __name__)
@@ -15,6 +16,7 @@ admin_bp = Blueprint("admin_bp", __name__)
 schedule_bp = Blueprint("schedule_bp", __name__)
 physician_bp = Blueprint("physician_bp", __name__)
 patient_bp = Blueprint("patien_bp", __name__)
+fhir_bp = Blueprint("fhir_bp", __name__)
 
 @auth_bp.route("/", methods = ["GET", "POST"])
 @cross_origin(supports_credentials=True)
@@ -191,6 +193,11 @@ def get_visits(userID, database=database):
     return response
 
 
-
+@fhir_bp.route("/search_fhir", methods = ["POST"])
+def get_patient_in_json(database=database):
+    if request.method == "POST":
+        json_object = request.json
+        response = request_fhir_patient_service(database, json_object)
+    return response
 
 

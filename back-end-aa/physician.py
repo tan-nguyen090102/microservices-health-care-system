@@ -14,7 +14,8 @@ def request_physician_patient_service(database, json_object):
     if get_patients is not None:
         list_of_patient = []
         for patient in get_patients:
-            list_of_patient.append([patient[0], patient[1], patient[2], patient[3], patient[5], patient[6], patient[7]])
+                                    # Pair ID,  patient ID, patient name, age,      dob,        phone,      gender,      content,    medication,  family history, patient history
+            list_of_patient.append([patient[0], patient[2], patient[4], patient[6], patient[7], patient[8], patient[10], patient[3], patient[11], patient[12], patient[13]])
         return json.dumps(list_of_patient)
     else:
         return json.dumps("False")
