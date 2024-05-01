@@ -1,11 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useLocation, Link, useNavigate } from "react-router-dom";
-import { 
-  Flex, 
-  Stack, 
-  Button,
-  Icon,
-} from "@chakra-ui/react";
+import { Flex, Stack, Button, Icon, Wrap, Text } from "@chakra-ui/react";
 import { MdOutlineOtherHouses } from "react-icons/md";
 import { BiCalendar } from "react-icons/bi";
 import { TbMessages } from "react-icons/tb";
@@ -67,11 +62,11 @@ function PatientDashboard() {
         }
       });
   };
-  
+
   const IP = window.location.hostname;
   const [isServiceDown, setServiceDown] = React.useState(false);
   const [errorMessage, setErrorMessage] = React.useState();
-    
+
   const navigate = useNavigate();
   const handleNavigate = async (path, target) => {
     if (path !== "/schedule") {
@@ -82,74 +77,69 @@ function PatientDashboard() {
       }).catch((error) => {
         setServiceDown(true);
         setErrorMessage(error.toString());
+        alert(error);
       });
-    
+
       if (result?.ok === true) {
         window.location = "http://" + IP + ":3010/scheduler";
       }
     }
   };
 
-
   return (
     <div>
       {!isUnauthorizedAccess && (
         <div>
-        <Flex
-          justify="space-between"
-          align="center"
-          background="blue.400"
-          p={2}
-          color="white"
-          fontWeight="bold"
-        >
-          Healthcare System
-          <Button color="white" colorScheme="blue.100" onClick={handleLogout}>
-            Logout
-          </Button>
-        </Flex>
+          <Flex
+            justify="space-between"
+            align="center"
+            background="blue.400"
+            p={2}
+            color="white"
+            fontWeight="bold"
+          >
+            Healthcare System
+            <Button color="white" colorScheme="blue.100" onClick={handleLogout}>
+              Logout
+            </Button>
+          </Flex>
 
-        <Flex
-          justify="space-between"
-          align="center" 
-          background="blue.100"
-          p={2}
-          color="black">
-
-          <Stack direction="row" spacing={6}>
-            <Link to="/patient-home">
-              <Icon as={MdOutlineOtherHouses}
-                color="blue.400" 
-                boxSize={4} ml={4}/> 
-                Home 
-            </Link>
-            <Link onClick={() => handleNavigate("/schedule", "schedule")}> 
-              <Icon as={BiCalendar} 
-                color="blue.400" 
-                boxSize={4} ml={4}/> 
-                Visits 
-            </Link>
-            <Link to="/messages">
-              <Icon as={TbMessages} 
-                color="blue.400" 
-                boxSize={4} ml={4}/> 
-                Messages 
-            </Link>
-            <Link to="/test-results">
-              <Icon as={GrTest} 
-                color="blue.400" 
-                boxSize={4} ml={4}/> 
+          <Flex
+            justify="space-between"
+            align="center"
+            background="blue.100"
+            p={2}
+            color="black"
+          >
+            <Stack direction="row" spacing={6}>
+              <Link to="/patient-home">
+                <Icon
+                  as={MdOutlineOtherHouses}
+                  color="blue.400"
+                  boxSize={4}
+                  ml={4}
+                />
+                Home
+              </Link>
+              <Link onClick={() => handleNavigate("/schedule", "schedule")}>
+                <Icon as={BiCalendar} color="blue.400" boxSize={4} ml={4} />
+                Visits
+              </Link>
+              <Link to="/messages">
+                <Icon as={TbMessages} color="blue.400" boxSize={4} ml={4} />
+                Messages
+              </Link>
+              <Link to="/test-results">
+                <Icon as={GrTest} color="blue.400" boxSize={4} ml={4} />
                 Test Results
-            </Link>
-            <Link to="/medications">
-              <Icon as={GiMedicines} 
-                color="blue.400" 
-                boxSize={4} ml={4}/> 
-                Medications 
-            </Link>
-          </Stack>
-        </Flex>
-      </div>
+              </Link>
+              <Link to="/medications">
+                <Icon as={GiMedicines} color="blue.400" boxSize={4} ml={4} />
+                Medications
+              </Link>
+            </Stack>
+          </Flex>
+        </div>
       )}
     </div>
   );
