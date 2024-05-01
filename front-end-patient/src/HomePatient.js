@@ -13,6 +13,8 @@ import {
 export default function HomePanel() {
   const loginIP = window.location.hostname;
   const location = useLocation();
+  const[accountBalance, setAccountBalance] = React.useState(0);
+  const [balanceErrorMessage,setBalanceErrorMessage] = React.useState("");
 
   const [isUnauthorizedAccess, setUnauthorizedAccess] = React.useState(false);
   useEffect(() => {
@@ -37,6 +39,7 @@ export default function HomePanel() {
           console.log(data);
           if (data[3] === "P") {
             setUnauthorizedAccess(false);
+           
             console.log("Welcome " + data[1]);
           } else {
             setUnauthorizedAccess(true);
@@ -44,6 +47,14 @@ export default function HomePanel() {
         }
       });
   }, [location, loginIP]);
+
+  //fetch user balance if logged in and authorize 
+  useEffect(() => {
+    debugger
+    if (!isUnauthorizedAccess){
+      fetchAccountBalance();
+    }
+  }, [isUnauthorizedAccess]);
 
   //Handle login
   const handleLogout = () => {
@@ -63,6 +74,37 @@ export default function HomePanel() {
         if (data === "Done") {
           window.location = window.location.origin + location.pathname;
         }
+      });
+  };
+
+  const fetchAccountBalance = () => {
+    debugger
+    fetch("http://" + loginIP + ":5000/patient-balance", {
+      method: "GET",
+      headers: {
+        Accept: "application/json",
+        "content-type": "application/json; charset=UTF-8",
+      },
+      mode: "cors",
+      credentials: "include",
+      
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        debugger
+        console.log(data);
+        if(data.status === "failure"){
+          setBalanceErrorMessage(data.errorMessage) 
+        }
+        else{
+        
+          setAccountBalance(data.accountBalance)
+        }
+       
+      })
+      .catch((err) => {
+        console.log(err)
+        setBalanceErrorMessage("Unable to connect to server. Try again later")
       });
   };
 
@@ -133,8 +175,15 @@ export default function HomePanel() {
                   </Stack>
 
                   <Stack direction="column" justify="center">
+                  {balanceErrorMessage && (
+                      <Wrap justify="center" mt={10}>
+                        <Text fontSize="x-large" mt={3} color="red" data-testid="errorMessage-text">
+                          <b>Failure: {balanceErrorMessage}</b>
+                        </Text>
+                      </Wrap>
+                    )}
                     <Wrap spacing="20px" mt={3}>
-                      <Text fontSize="sm">Amount Due</Text>
+                      <Text fontSize="sm">Amount Due : ${accountBalance}</Text>
                     </Wrap>
                   </Stack>
                 

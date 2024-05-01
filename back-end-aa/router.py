@@ -6,11 +6,13 @@ from authentication import url_login_service, user_login_service, logout_service
 from admin import delete_noti_service, request_noti_service, request_user_service, delete_user_service, insert_user_service
 from schedule import fetch_date_event_service, insert_date_event_service, delete_date_event_service
 from signup_patient import user_signup_service
+from patient_billing import patient_balance_service
 
 
 auth_bp = Blueprint("auth_bp", __name__)
 admin_bp = Blueprint("admin_bp", __name__)
 schedule_bp = Blueprint("schedule_bp", __name__)
+patient_bp = Blueprint("patient_bp", __name__)
 
 @auth_bp.route("/", methods = ["GET", "POST"])
 @cross_origin(supports_credentials=True)
@@ -109,3 +111,9 @@ def signup():
         if "email" in json_object:
             response = user_signup_service(database=database, json_object=json_object)
             return jsonify(response)
+        
+
+@patient_bp.route("/patient-balance", methods = ["GET"])
+@cross_origin(supports_credentials=True)
+def get_patient_balance():
+    return patient_balance_service(database=database)

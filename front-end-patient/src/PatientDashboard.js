@@ -6,11 +6,11 @@ import {
   Button,
   Icon,
 } from "@chakra-ui/react";
-import { IoMenuOutline } from "react-icons/io5";
-import { BiCalendar } from "react-icons/bi";
-import { TbMessages } from "react-icons/tb";
-import { GiMedicines } from "react-icons/gi";
-import { GrTest } from "react-icons/gr";
+//import { IoMenuOutline } from "react-icons/io5";
+// import { BiCalendar } from "react-icons/bi";
+// import { TbMessages } from "react-icons/tb";
+// import { GiMedicines } from "react-icons/gi";
+// import { GrTest } from "react-icons/gr";
 
 function PatientDashboard() {
     const loginIP = window.location.hostname;
@@ -60,15 +60,25 @@ function PatientDashboard() {
 
       <Stack direction="row" spacing={6}>
         <Link to="/patient-home">
-          <Icon as={IoMenuOutline} color="blue.400" boxSize={5} ml={4}/> </Link>
+          {/* <Icon as={IoMenuOutline} color="blue.400" boxSize={5} ml={4}/> </Link> */}
+          home
+          </Link>
         <Link to="/visits">
-          <Icon as={BiCalendar} color="blue.400" boxSize={4} ml={4}/> Visits </Link>
+          {/* <Icon as={BiCalendar} color="blue.400" boxSize={4} ml={4}/> Visits </Link> */}
+          visits
+          </Link>
         <Link to="/messages">
-          <Icon as={TbMessages} color="blue.400" boxSize={4} ml={4}/> Messages </Link>
+          {/* <Icon as={TbMessages} color="blue.400" boxSize={4} ml={4}/> Messages </Link> */}
+          messages
+          </Link>
         <Link to="/test-results">
-          <Icon as={GrTest} color="blue.400" boxSize={4} ml={4}/> Test Results</Link>
+          {/* <Icon as={GrTest} color="blue.400" boxSize={4} ml={4}/> Test Results</Link> */}
+          test-results
+          </Link>
         <Link to="/medications">
-          <Icon as={GiMedicines} color="blue.400" boxSize={4} ml={4}/> Medications </Link>
+          {/* <Icon as={GiMedicines} color="blue.400" boxSize={4} ml={4}/> Medications </Link> */}
+          medications
+        </Link>
       </Stack>
     </Flex>
     </div>
