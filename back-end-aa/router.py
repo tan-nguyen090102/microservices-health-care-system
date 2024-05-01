@@ -15,7 +15,7 @@ auth_bp = Blueprint("auth_bp", __name__)
 admin_bp = Blueprint("admin_bp", __name__)
 schedule_bp = Blueprint("schedule_bp", __name__)
 physician_bp = Blueprint("physician_bp", __name__)
-patient_bp = Blueprint("patien_bp", __name__)
+patient_bp = Blueprint("patient_bp", __name__)
 fhir_bp = Blueprint("fhir_bp", __name__)
 
 @auth_bp.route("/", methods = ["GET", "POST"])

@@ -6,6 +6,7 @@ import TestResults from "./TestResults";
 import Medications from "./Medications";
 import PatientDashboard from "./PatientDashboard";
 import PatientInfoSurvey from "./PatientInfoSurvey";
+import Appointments from "./Appointments";
 
 function App() {
   return (
@@ -17,6 +18,7 @@ function App() {
           <Route path="/test-results" element={<TestResults></TestResults>}></Route>
           <Route path="/medications" element={<Medications></Medications>}></Route>
           <Route path="/patient-info-survey" element={<PatientInfoSurvey></PatientInfoSurvey>}></Route>
+          <Route path="/appointments" element={<Appointments></Appointments>}></Route>
         </Routes>
     </div>  
   );

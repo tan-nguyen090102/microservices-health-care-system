@@ -9,7 +9,7 @@ import {
   Box
 } from "@chakra-ui/react";
 
-export default function HomePanel() {
+export default function Appointments() {
   const loginIP = window.location.hostname;
   const location = useLocation();
 
@@ -37,14 +37,9 @@ export default function HomePanel() {
           if (data[3] === "P") {
             setUnauthorizedAccess(false);
             const userID = data[1];
-            Promise.all([
-              fetchPatientInfo(userID),
-              console.log("Welcome " + data[1])
-            ])
-            .then(([infoData]) => {
-              console.log("Patient Info:", infoData);
-              console.log("Welcome " + data[1]);
-            })
+            console.log(userID);
+            fetchPatientVisits(userID);
+            console.log("Welcome " + data[1]);
           } else {
             setUnauthorizedAccess(true);
           }
@@ -74,10 +69,10 @@ export default function HomePanel() {
   };
 
 
-  const [patientInfo, setPatientInfo] = useState(null);
-  const fetchPatientInfo = (userID) => {
+  const [patientVisits, setPatientVisits] = useState(null);
+  const fetchPatientVisits = (userID) => {
     console.log(userID)
-    fetch(`http://${loginIP}:5000/patient-info-survey/${userID}`, {
+    fetch(`http://${loginIP}:5000/scheduler/${userID}`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
@@ -86,12 +81,13 @@ export default function HomePanel() {
       .then((response) => response.json())
       .then((data) => {
         console.log(data);
-        setPatientInfo(data);
+        setPatientVisits(data);
       })
       .catch((error) => {
-        console.error("Error fetching patient information:", error);
+        console.error("Error fetching patient visits:", error);
       });
   };
+
 
   return (
     <div>
@@ -100,7 +96,6 @@ export default function HomePanel() {
         alignItems="baseline"
         justifyContent="left"
         background={isUnauthorizedAccess ? "white" : "blue.400"}
-        overflow= "auto"
       >
         {isUnauthorizedAccess && (
           <Wrap justify="center" mt={10}>
@@ -110,32 +105,25 @@ export default function HomePanel() {
           </Wrap>
         )}
         {!isUnauthorizedAccess && (
-          <Stack direction="column" mt={50}>
-            <Flex
-              width="100%"
-              ml={100}
-              direction="column"
-              background="blue.200"
-              p={12}
-              rounded={6}
-            >
-              <Stack direction="row" justify="left">
-                <Heading mb={3}>Welcome!</Heading>
-              </Stack>
-              
-
-              <Box mt={4} ml={95}> 
-                <Flex
-                  direction="column"
-                  background="blue.100"
-                  p={12}
-                  rounded={6}
-                >
-                  <Stack direction="row" justify="left">
-                    <Heading size='md'> Patient Information</Heading>
-                  </Stack>
-
-                  {patientInfo && patientInfo.map((patient, index) => (
+          <Flex
+            height="100vh"
+            alignItems="baseline"
+            justifyContent="left"
+            background="blue.400"
+          >
+            <Stack direction="column" mt={50}>
+              <Flex
+                width="100%"
+                ml={100}
+                direction="column"
+                background="blue.200"
+                p={12}
+                rounded={6}
+              >
+                <Stack direction="row" justify="left">
+                  <Heading mb={3}>Appointments</Heading>
+                </Stack>
+                {patientVisits && patientVisits.map((patient, index) => (
                     <Flex 
                       key={index} 
                       direction="column" 
@@ -144,23 +132,16 @@ export default function HomePanel() {
                       rounded={6} 
                       mt={4}>
 
-                      <Heading size="md">{patient.fullName}</Heading>
-                      <Text><b>Age:</b> {patient.age}</Text>
-                      <Text><b>Date of Birth:</b> {patient.dob}</Text>
-                      <Text><b>Phone:</b> {patient.phone}</Text>
-                      <Text><b>Address:</b> {patient.address}</Text>
-                      <Text><b>Gender:</b> {patient.gender}</Text>
-                      <Text><b>Medications:</b> {patient.medications}</Text>
-                      <Text><b>Family History:</b> {patient.familyHistory}</Text>
-                      <Text><b>Patient History:</b> {patient.patientHistory}</Text>
+                      <Text><b>Start Time:</b> {patient.start_time}</Text>
+                      <Text><b>End Time:</b> {patient.end_time}</Text>
+                      <Text><b>Appointment Details:</b> {patient.context}</Text>
 
-                    </Flex>
-                  ))}
+                  </Flex>
+                ))}
               </Flex>
-            </Box>
+            </Stack>
           </Flex>
-        </Stack>
-      )}
-    </Flex>
-  </div>
-)};
+        )}
+      </Flex>
+    </div>
+  )}
