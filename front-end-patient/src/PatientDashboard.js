@@ -6,6 +6,7 @@ import { BiCalendar } from "react-icons/bi";
 import { TbMessages } from "react-icons/tb";
 import { GiMedicines } from "react-icons/gi";
 import { GrTest } from "react-icons/gr";
+import { AiOutlineSchedule } from "react-icons/ai";
 
 function PatientDashboard() {
   const loginIP = window.location.hostname;
@@ -122,8 +123,14 @@ function PatientDashboard() {
                 Home
               </Link>
               <Link onClick={() => handleNavigate("/schedule", "schedule")}>
+              <Icon as={AiOutlineSchedule} 
+                color="blue.400" 
+                boxSize={4} ml={4}/> 
+                Scheduler 
+            </Link>
+            <Link to="/appointments"> 
                 <Icon as={BiCalendar} color="blue.400" boxSize={4} ml={4} />
-                Visits
+                Appointments
               </Link>
               <Link to="/messages">
                 <Icon as={TbMessages} color="blue.400" boxSize={4} ml={4} />
