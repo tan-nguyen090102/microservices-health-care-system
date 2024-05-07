@@ -196,9 +196,18 @@ export default function SchedulePanel() {
       });
   };
 
-  const handleReturnModule = () => {
+  const handleReturnModule = async () => {
     var link = HandleChooseLink(authorizedCode);
-    window.location = link;
+    const result = await fetch(link, {
+      method: "HEAD",
+    }).catch((error) => {
+      setServiceDown(true);
+      setErrorMessage(error.toString());
+    });
+
+    if (result?.ok === true) {
+      window.location = link;
+    }
   };
 
   function CreateListOfSchedule(list = []) {
