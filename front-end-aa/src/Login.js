@@ -20,8 +20,8 @@ export default function LoginPanel() {
   const [errorMessage, setErrorMessage] = React.useState();
   useEffect(() => {
     document.title = "Healthcare System Authentication";
-    var userID = "daniel.stone@yahoo.com";
-    var password = "12345";
+    //var userID = "daniel.stone@yahoo.com";
+    //var password = "12345";
     fetch("http://" + serverIP + ":5000/cas-login", {
       method: "POST",
       headers: {
@@ -30,10 +30,7 @@ export default function LoginPanel() {
       },
       mode: "cors",
       credentials: "include",
-      body: JSON.stringify({
-        userID: userID,
-        password : password
-      }),
+      body: JSON.stringify({}),
     })
       ?.then((response) => response.json())
       .then(async (data) => {
