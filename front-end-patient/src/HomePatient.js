@@ -198,15 +198,10 @@ export default function HomePanel() {
                       <Text><b>Medications:</b> {patient.medications}</Text>
                       <Text><b>Family History:</b> {patient.familyHistory}</Text>
                       <Text><b>Patient History:</b> {patient.patientHistory}</Text>
-
+                      
                     </Flex>
                   ))}
-              </Flex>
-            </Box>
-          </Flex>
-        </Stack>
-      )}
-      <Stack direction="column" justify="center">
+                  <Stack direction="column" justify="center">
                   {balanceErrorMessage && (
                       <Wrap justify="center" mt={10}>
                         <Text fontSize="x-large" mt={3} color="red" data-testid="errorMessage-text">
@@ -218,6 +213,12 @@ export default function HomePanel() {
                       <Text fontSize="sm">Amount Due : ${accountBalance}</Text>
                     </Wrap>
                   </Stack>
+              </Flex>
+            </Box>
+          </Flex>
+        </Stack>
+      )}
+      
     </Flex>
   </div>
 )};

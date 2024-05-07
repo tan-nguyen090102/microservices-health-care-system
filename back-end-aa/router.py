@@ -9,7 +9,7 @@ from signup_patient import user_signup_service
 from physician import request_physician_patient_service, delete_physician_patient_service, insert_physician_patient_service
 from patient import insert_patient_info, get_patient_info, get_patient_medication, get_patient_visits
 from fhir_service import request_fhir_patient_service
-from patient_billing import patient_balance_service
+from patient_billing import get_patient_balance_amount, get_patient_billing_info
 
 
 auth_bp = Blueprint("auth_bp", __name__)
@@ -206,7 +206,25 @@ def get_patient_in_json(database=database):
 
         
 
-@patient_bp.route("/patient-balance", methods = ["GET"])
+@patient_bp.route("/patient-balance", methods = ["GET","OPTIONS"])
 @cross_origin(supports_credentials=True)
 def get_patient_balance():
-    return patient_balance_service(database=database)
+    if request.method == "OPTIONS":
+        response = jsonify({"message": "CORS preflight request handled"})
+        response.headers["Access-Control-Allow-Origin"] = "http://localhost:3001"
+        response.headers["Access-Control-Allow-Methods"] = "GET, OPTIONS"
+        response.headers["Access-Control-Allow-Headers"] = "Content-Type, Authorization"
+        return response, 200
+    return get_patient_balance_amount(database=database)
+
+@patient_bp.route("/patient-billing/<userID>", methods = ["GET", "OPTIONS"])
+@cross_origin(supports_credentials=True)
+def get_patient_billing(userID, database=database):
+    if request.method == "OPTIONS":
+        response = jsonify({"message": "CORS preflight request handled"})
+        response.headers["Access-Control-Allow-Origin"] = "http://localhost:3001"
+        response.headers["Access-Control-Allow-Methods"] = "GET, OPTIONS"
+        response.headers["Access-Control-Allow-Headers"] = "Content-Type, Authorization"
+        return response, 200
+    return get_patient_billing_info(database, userID)
+

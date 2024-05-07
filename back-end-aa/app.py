@@ -2,7 +2,7 @@ import os
 from flask import Flask
 from flask_session import Session
 from flask_cors import CORS
-from router import auth_bp, admin_bp, schedule_bp, physician_bp, patient_bp, fhir_bp, patient_bp
+from router import auth_bp, admin_bp, schedule_bp, physician_bp, patient_bp, fhir_bp
 from database_connection import database
 
 
@@ -26,7 +26,6 @@ if __name__ == "__main__":
         app.register_blueprint(physician_bp)
         app.register_blueprint(patient_bp)
         app.register_blueprint(fhir_bp)
-        app.register_blueprint(patient_bp)
         app.run(host="0.0.0.0")
     finally:
         database.close()

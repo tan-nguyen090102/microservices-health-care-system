@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from "react";
 import { useLocation, Link, useNavigate } from "react-router-dom";
 import { Flex, Stack, Button, Icon, Wrap, Text } from "@chakra-ui/react";
-//import { MdOutlineOtherHouses } from "react-icons/md";
-// import { BiCalendar } from "react-icons/bi";
-// import { TbMessages } from "react-icons/tb";
-// import { GiMedicines } from "react-icons/gi";
-// import { GrTest } from "react-icons/gr";
+import { MdOutlineOtherHouses } from "react-icons/md";
+import { BiCalendar } from "react-icons/bi";
+import { TbMessages } from "react-icons/tb";
+import { GiMedicines } from "react-icons/gi";
+import { GrTest } from "react-icons/gr";
+import { MdOutlinePayment } from "react-icons/md";
 import { AiOutlineSchedule } from "react-icons/ai";
 
 function PatientDashboard() {
@@ -143,6 +144,10 @@ function PatientDashboard() {
               <Link to="/medications">
                 <Icon as={GiMedicines} color="blue.400" boxSize={4} ml={4} />
                 Medications
+              </Link>
+              <Link to="/billing">
+                <Icon as={MdOutlinePayment} color="blue.400" boxSize={4} ml={4} />
+                Payments
               </Link>
             </Stack>
           </Flex>
