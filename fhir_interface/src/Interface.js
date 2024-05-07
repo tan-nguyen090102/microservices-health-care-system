@@ -104,36 +104,47 @@ export default function InterfacePanel() {
         justifyContent="center"
         background={"white"}
       >
-        <Stack direction="column">
-          {isPopUpInvalid && (
-            <Text data-testid="unfilledFields" color="red" mb={3}>
-              *Please fill out all required fields*
-            </Text>
-          )}
-          <FormControl>
-            <FormLabel>Search and Download with Patient ID:</FormLabel>
-            <Input
-              name="patientID"
-              data-testid="patientID"
-              onChange={handleInput}
-              value={inputValue.patientID}
-              variant="filled"
-              background="gray.200"
-            ></Input>
-          </FormControl>
-          <Button
-            data-testid="addAddButton"
-            colorScheme="green"
-            onClick={handleSearch}
-          >
-            Download
-          </Button>
-          {!isUserValid && (
-            <Text data-testid="unfilledFields" color="red" mb={3}>
-              *Patient is not found*
-            </Text>
-          )}
-        </Stack>
+        <Flex
+          width="auto"
+          mt={50}
+          p={5}
+          direction="column"
+          background="white"
+          rounded={6}
+        >
+          <Stack direction="column">
+            {isPopUpInvalid && (
+              <Text data-testid="unfilledFields" color="red" mb={3}>
+                *Please fill out all required fields*
+              </Text>
+            )}
+            <FormControl>
+              <FormLabel fontSize="large">
+                Search and Download with Patient ID:
+              </FormLabel>
+              <Input
+                name="patientID"
+                data-testid="patientID"
+                onChange={handleInput}
+                value={inputValue.patientID}
+                variant="filled"
+                background="gray.200"
+              ></Input>
+            </FormControl>
+            <Button
+              data-testid="addAddButton"
+              colorScheme="green"
+              onClick={handleSearch}
+            >
+              Download
+            </Button>
+            {!isUserValid && (
+              <Text data-testid="unfilledFields" color="red" mb={3}>
+                *Patient is not found*
+              </Text>
+            )}
+          </Stack>
+        </Flex>
       </Flex>
     </div>
   );
