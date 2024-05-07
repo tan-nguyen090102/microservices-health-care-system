@@ -54,6 +54,7 @@ def get_patient_info(database, userID):
         datas.append(data)
   
     return jsonify(datas)
+    
 
 
 def get_patient_medication(database, userID):

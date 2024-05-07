@@ -59,6 +59,7 @@ CREATE TABLE `patientinfo` (
   `medications` varchar(128) DEFAULT NULL,
   `familyHistory` varchar(128) DEFAULT NULL,
   `patientHistory` varchar(128) DEFAULT NULL,
+  
   PRIMARY KEY (`userID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -167,6 +168,52 @@ INSERT INTO `users` VALUES ('U1','Daniel','Stones','daniel.stone@yahoo.com','202
 UNLOCK TABLES;
 
 --
+-- Table structure for table `patient_billing`
+--
+
+DROP TABLE IF EXISTS `patient_billing`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `patient_billing` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `user_id` varchar(45) NOT NULL,
+  `charged_amount` DECIMAL(10,2) NOT NULL,
+  `amount_paid` DECIMAL(10,2) DEFAULT NULL,
+  `payment_status` varchar(128) DEFAULT NULL,
+  `due_date` DATETIME DEFAULT NULL,
+  `payment_date` DATETIME DEFAULT NULL,
+  `bill_date` DATETIME DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  FOREIGN KEY (`user_id`) REFERENCES users (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `patient_billing`
+--
+
+LOCK TABLES `patient_billing` WRITE;
+/*!40000 ALTER TABLE `patient_billing` DISABLE KEYS */;
+INSERT INTO `patient_billing` (`user_id`,`charged_amount`, `amount_paid`,`payment_status` , `bill_date`) 
+VALUES ('U1',50.00,0.00,'pending', now());
+/*!40000 ALTER TABLE `patient_billing` ENABLE KEYS */;
+UNLOCK TABLES;
+
+DELIMITER ;;
+CREATE DEFINER=`root`@`localhost` PROCEDURE `select_patient_billing_by_user_id`(in input_user_id VARCHAR(25))
+BEGIN
+	SELECT * FROM patient_billing WHERE user_id = input_user_id;
+END ;;
+DELIMITER ;
+
+DELIMITER ;
+CREATE DEFINER=`root`@`localhost` PROCEDURE `get_patient_balance`(in input_user_id VARCHAR(16))
+BEGIN
+	SELECT sum(charged_amount) as accountBalance FROM patient_billing WHERE (user_id = input_user_id) AND payment_status != 'paid';
+END ;;
+DELIMITER ;
+--
+
 -- Dumping routines for database 'dev_db'
 --
 /*!50003 DROP PROCEDURE IF EXISTS `check_pw` */;

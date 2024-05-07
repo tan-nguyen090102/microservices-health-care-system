@@ -7,6 +7,7 @@ import PatientDashboard from "./PatientDashboard";
 import PatientInfoSurvey from "./PatientInfoSurvey";
 import Appointments from "./Appointments";
 import Messages from "./Messages";
+import Payments from "./Payments";
 
 function App() {
   return (
@@ -19,6 +20,7 @@ function App() {
           <Route path="/patient-info-survey" element={<PatientInfoSurvey></PatientInfoSurvey>}></Route>
           <Route path="/appointments" element={<Appointments></Appointments>}></Route>
           <Route path="/messages" element={<Messages></Messages>}></Route>
+          <Route path="/billing" element={<Payments></Payments>}></Route>
         </Routes>
     </div>  
   );

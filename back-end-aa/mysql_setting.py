@@ -5,7 +5,7 @@ class Setting():
     def __init__(self) -> None:
         self.mysql_setting = {
             "user": "root",
-            "password": "12345",
+            "password": "Your password",
             "server": "localhost",
             "port": 3306,
             "db": "dev_db",
