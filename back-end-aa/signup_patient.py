@@ -3,22 +3,42 @@ from flask import jsonify, session
 from database_connection import call_stored_procedure
 
 def user_signup_service(database, json_object):
-    firstName = json_object["firstName"]
-    lastName = json_object["lastName"]
+    first_name = json_object["firstName"]
+    last_name = json_object["lastName"]
     email = json_object["email"]
-    pw = json_object["password"]
+    password = json_object["password"]
+    authorization_code = json_object["authorizationCode"]
     
     #check if user already exists in the database
     check_user = call_stored_procedure(database, "check_user", (email,))
     #check if pw already exists in the database
-    check_pw = call_stored_procedure(database, "check_pw", (pw,))
+    check_pw = call_stored_procedure(database, "check_pw", (password,))
 
     if check_user:
-      return {"status": "Error", "Message": "An account already exists for this email."}
+      response_data = {"status": "Error", "Message": "An account already exists for this email."}
+      return response_data
     elif check_pw:
-      return {"status": "Error", "Message": "Password is taken. Choose a different password."}
+      response_data = {"status": "Error", "Message": "Password is taken. Choose a different password."}
+      return response_data
     else:
-      insert_user = call_stored_procedure(database, "insert_user", (firstName, lastName, email, pw))
-      return {"status": "Success"}
-  
+      get_users = call_stored_procedure(database,"select_all_from_table", ("users",),)
 
+      if get_users is not None:
+            biggest_entry = 0
+            for user in get_users:
+              id = int([*(user[0])][1])
+
+            if (biggest_entry < id):
+                biggest_entry = id
+
+      
+      result = call_stored_procedure(database, 
+                          "insert_entry", 
+                          ("users", 
+                           "id, first_name, last_name, email, password, authorization_code", 
+                           "'U" + str(biggest_entry + 1) + "', '" + first_name + "', '" + last_name + "', '" + email + "', '" + password + "', '" + authorization_code + "'"),)
+      database.commit()
+      response_data = {"status": "Success"}
+      return response_data
+
+      

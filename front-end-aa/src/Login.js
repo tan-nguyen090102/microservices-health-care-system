@@ -9,6 +9,7 @@ import {
   Text,
   Input,
 } from "@chakra-ui/react";
+import HandleChooseLink from "./LinkToReturn";
 
 export default function LoginPanel() {
   const serverIP = window.location.hostname;
@@ -112,6 +113,20 @@ export default function LoginPanel() {
         setWhichServiceDown("Server is down at the moment");
         setErrorMessage(error.toString());
       });
+  };
+
+  const handleReroute = async (servicePath) => {
+    const result = await fetch(servicePath, {
+      method: "HEAD",
+    }).catch((error) => {
+      setServiceDown(true);
+      setWhichServiceDown("Server is down at the moment");
+      setErrorMessage(error.toString());
+    });
+
+    if (result?.ok === true) {
+      window.location = servicePath;
+    }
   };
 
   //DOM
@@ -230,11 +245,81 @@ export default function LoginPanel() {
       </Flex>
       {!isUnauthorizedAccess && (
         <Flex height="50vh" justifyContent="center" background="blue.500">
-          <Wrap justify="center" mt={10}>
-            <Text fontSize="x-large" mt={6}>
-              Log in to other modules
-            </Text>
-          </Wrap>
+          <Stack direction="column">
+            <Wrap justify="center" mt={10}>
+              <Text fontSize="x-large" mt={6}>
+                Log in to other modules
+              </Text>
+            </Wrap>
+            <Stack direction="row">
+              <Button
+                name="patientButton"
+                data-testid="patientButton"
+                backgroundColor="blue.200"
+                variant="outline"
+                onClick={() => {
+                  handleReroute(HandleChooseLink("P"));
+                }}
+              >
+                PATIENT
+              </Button>
+              <Button
+                name="physicianButton"
+                data-testid="physicianButton"
+                backgroundColor="teal.400"
+                variant="outline"
+                onClick={() => {
+                  handleReroute(HandleChooseLink("H"));
+                }}
+              >
+                PHYSICIAN
+              </Button>
+              <Button
+                name="pharmacistButton"
+                data-testid="pharmacistButton"
+                backgroundColor="red.200"
+                variant="outline"
+                onClick={() => {
+                  handleReroute(HandleChooseLink("C"));
+                }}
+              >
+                PHARMACIST
+              </Button>
+              <Button
+                name="labButton"
+                data-testid="labButton"
+                backgroundColor="yellow.200"
+                variant="outline"
+                onClick={() => {
+                  handleReroute(HandleChooseLink("L"));
+                }}
+              >
+                LAB
+              </Button>
+              <Button
+                name="billingButton"
+                data-testid="billingButton"
+                backgroundColor="purple.200"
+                variant="outline"
+                onClick={() => {
+                  handleReroute(HandleChooseLink("B"));
+                }}
+              >
+                BILLING
+              </Button>
+              <Button
+                name="adminButton"
+                data-testid="adminButton"
+                backgroundColor="green.200"
+                variant="outline"
+                onClick={() => {
+                  handleReroute(HandleChooseLink("A"));
+                }}
+              >
+                ADMIN
+              </Button>
+            </Stack>
+          </Stack>
         </Flex>
       )}
     </div>

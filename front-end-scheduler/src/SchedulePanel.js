@@ -42,6 +42,7 @@ export default function SchedulePanel() {
 
   const [userName, setUserName] = React.useState("");
   const [userID, setUserID] = React.useState("");
+  const [authorizedCode, setAuthorizedCode] = React.useState("");
 
   const [isSchedulePresent, setSchedulePresent] = React.useState(false);
   const [listOfScheduleSFX, setListOfScheduleSFX] = React.useState([]);
@@ -92,6 +93,7 @@ export default function SchedulePanel() {
           }
         } else {
           if (data[3] === "P" || data[3] === "H" || data[3] === "C") {
+            setAuthorizedCode(data[3]);
             fetch("http://" + IP + ":5000/schedule", {
               method: "POST",
               headers: {
@@ -194,6 +196,11 @@ export default function SchedulePanel() {
       });
   };
 
+  const handleReturnModule = () => {
+    var link = HandleChooseLink(authorizedCode);
+    window.location = link;
+  };
+
   function CreateListOfSchedule(list = []) {
     var scheduleList = [];
     scheduleList = list.map((item, index) => {
@@ -202,8 +209,8 @@ export default function SchedulePanel() {
           <Tr>
             <Td>{item[0]}</Td>
             <Td>{item[2] + " " + item[3]}</Td>
-            <Td>{item[4]}</Td>
-            <Td>{item[5]}</Td>
+            <Td>{item[4].split(" ")[1]}</Td>
+            <Td>{item[5].split(" ")[1]}</Td>
             <Td>{item[6]}</Td>
           </Tr>
         </Tbody>
@@ -486,15 +493,28 @@ export default function SchedulePanel() {
                     </TableContainer>
                   )}
                   {CreateInsertModalBox(modalBox)}
-                  <Button
-                    data-testid="addButton"
-                    colorScheme="teal"
-                    mt={3}
-                    onClick={modalBox.onOpen}
-                    alignSelf="left"
-                  >
-                    Add
-                  </Button>
+
+                  <Stack direction="row">
+                    <Button
+                      data-testid="addButton"
+                      backgroundColor="red.300"
+                      mt={3}
+                      onClick={handleReturnModule}
+                      alignSelf="left"
+                    >
+                      Back to the Module
+                    </Button>
+                    <Button
+                      data-testid="addButton"
+                      colorScheme="teal"
+                      mt={3}
+                      onClick={modalBox.onOpen}
+                      alignSelf="left"
+                    >
+                      Add Event
+                    </Button>
+                  </Stack>
+
                   {isServiceDown && (
                     <Wrap justify="center" mt={10}>
                       <Text fontSize="medium" mt={3}>

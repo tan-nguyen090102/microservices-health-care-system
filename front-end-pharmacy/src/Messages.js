@@ -1,11 +1,11 @@
 import React from "react";
 import { 
   Flex, 
-  Stack,
-  Heading, 
+  Stack, 
+  Heading,
 } from "@chakra-ui/react";
 
-function Visits () {
+function Messages() {
   return(
     <div>
       <Flex
@@ -24,7 +24,7 @@ function Visits () {
           rounded={6}
         >
         <Stack direction="row" justify="left">
-          <Heading mb={3}>Visits</Heading>
+          <Heading mb={3}>Messages</Heading>
         </Stack>
         </Flex>
       </Stack>
@@ -32,4 +32,4 @@ function Visits () {
     </div>
   )
 }
-export default Visits;
+export default Messages;

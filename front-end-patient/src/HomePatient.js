@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
 import { 
   Flex, 
@@ -6,7 +6,6 @@ import {
   Heading, 
   Text, 
   Wrap,
-  Spacer,
   Box
 } from "@chakra-ui/react";
 
@@ -40,7 +39,15 @@ export default function HomePanel() {
           if (data[3] === "P") {
             setUnauthorizedAccess(false);
            
-            console.log("Welcome " + data[1]);
+            const userID = data[1];
+            Promise.all([
+              fetchPatientInfo(userID),
+              console.log("Welcome " + data[1])
+            ])
+            .then(([infoData]) => {
+              console.log("Patient Info:", infoData);
+              console.log("Welcome " + data[1]);
+            })
           } else {
             setUnauthorizedAccess(true);
           }
@@ -108,6 +115,26 @@ export default function HomePanel() {
       });
   };
 
+
+  const [patientInfo, setPatientInfo] = useState(null);
+  const fetchPatientInfo = (userID) => {
+    console.log(userID)
+    fetch(`http://${loginIP}:5000/patient-info-survey/${userID}`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      }
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        console.log(data);
+        setPatientInfo(data);
+      })
+      .catch((error) => {
+        console.error("Error fetching patient information:", error);
+      });
+  };
+
   return (
     <div>
       <Flex
@@ -115,6 +142,7 @@ export default function HomePanel() {
         alignItems="baseline"
         justifyContent="left"
         background={isUnauthorizedAccess ? "white" : "blue.400"}
+        overflow= "auto"
       >
         {isUnauthorizedAccess && (
           <Wrap justify="center" mt={10}>
@@ -137,44 +165,48 @@ export default function HomePanel() {
                 <Heading mb={3}>Welcome!</Heading>
               </Stack>
               
-              <Box mt={4}> 
+
+              <Box mt={4} ml={95}> 
                 <Flex
-                  width="50vh"
-                  ml={100}
                   direction="column"
                   background="blue.100"
                   p={12}
                   rounded={6}
                 >
                   <Stack direction="row" justify="left">
-                    <Heading size='md'>Upcoming Visits</Heading>
+                    <Heading size='md'> Patient Information</Heading>
                   </Stack>
 
-                  <Stack direction="column" justify="center">
-                    <Wrap spacing="20px" mt={3}>
-                      <Text fontSize="sm">Dates</Text>
-                    </Wrap>
-                  </Stack>
-
-                </Flex>
-              </Box>
-              
-              <Spacer />
-  
-              <Box mt={4}> 
-                <Flex
-                  width="50vh"
-                  ml={100}
-                  direction="column"
-                  background="blue.100"
-                  p={12}
+                  {patientInfo && patientInfo.map((patient, index) => (
+                    <Flex 
+                      key={index} 
+                      direction="column" 
+                      background="blue.100" 
+                      p={4} 
                   rounded={6}
                 >
                   <Stack direction="row" justify="left">
                     <Heading size='md'>Account Balance</Heading>
                   </Stack>
 
-                  <Stack direction="column" justify="center">
+                      <Heading size="md">{patient.fullName}</Heading>
+                      <Text><b>Age:</b> {patient.age}</Text>
+                      <Text><b>Date of Birth:</b> {patient.dob}</Text>
+                      <Text><b>Phone:</b> {patient.phone}</Text>
+                      <Text><b>Address:</b> {patient.address}</Text>
+                      <Text><b>Gender:</b> {patient.gender}</Text>
+                      <Text><b>Medications:</b> {patient.medications}</Text>
+                      <Text><b>Family History:</b> {patient.familyHistory}</Text>
+                      <Text><b>Patient History:</b> {patient.patientHistory}</Text>
+
+                    </Flex>
+                  ))}
+              </Flex>
+            </Box>
+          </Flex>
+        </Stack>
+      )}
+      <Stack direction="column" justify="center">
                   {balanceErrorMessage && (
                       <Wrap justify="center" mt={10}>
                         <Text fontSize="x-large" mt={3} color="red" data-testid="errorMessage-text">
@@ -186,13 +218,6 @@ export default function HomePanel() {
                       <Text fontSize="sm">Amount Due : ${accountBalance}</Text>
                     </Wrap>
                   </Stack>
-                
-                </Flex>
-              </Box>
-  
-            </Flex>
-          </Stack>
-        )}
-      </Flex>
-    </div>
-  )};
+    </Flex>
+  </div>
+)};
